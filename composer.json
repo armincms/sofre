@@ -1,0 +1,32 @@
+{
+    "name": "armincms/sofre",
+    "description": "A Laravel Nova tool.",
+    "keywords": [
+        "laravel",
+        "nova"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=7.1.0", 
+        "armincms/currency": "*",
+        "armincms/category": "*",
+        "armincms/comment": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Armincms\\Sofre\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Armincms\\Sofre\\ToolServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
