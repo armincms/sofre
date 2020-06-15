@@ -9,6 +9,7 @@
     "require": {
         "php": ">=7.1.0",  
         "armincms/armincms": "~0.1",
+        "armincms/targomaan": "~0.1",
         "armincms/currency": "~0.1",
         "armincms/category": "~0.1",
         "armincms/comment": "~0.1"
