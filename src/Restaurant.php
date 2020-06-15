@@ -16,13 +16,13 @@ use Core\HttpSite\Contracts\Hitsable;
 use Core\HttpSite\Concerns\Visiting;
 use Core\HttpSite\Concerns\IntractsWithSite;
 use Core\HttpSite\Component; 
-use Armincms\Facility\HasFacilities;
+use Armincms\Facility\Facilities;
 use Armincms\Location\Location; 
 
 class Restaurant extends Model implements Publicatable, SEO, Linkable, Hitsable
 { 
     use InteractsWithCategories;
-    use HasFacilities, Publishing, SEOTrait, Permalink, Visiting, IntractsWithSite; 
+    use Facilities, Publishing, SEOTrait, Permalink, Visiting, IntractsWithSite; 
  
     protected $publishStatus = 'approved'; 
 
