@@ -34,7 +34,7 @@ class CreateFoodsTable extends Migration
 
             $table
                 ->foreign('sequence_key')->references('sequence_key')
-                ->on(Helper::table('food_groups'))
+                ->on(Helper::table('foods'))
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
