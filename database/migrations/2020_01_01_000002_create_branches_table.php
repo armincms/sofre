@@ -21,13 +21,7 @@ class CreateBranchesTable extends Migration
             $table->abstract();    
             $table->string('sequence_key')->nullable();
             $table->softDeletes();
-            $table->timestamps(); 
-            
-            $table
-                ->foreign('sequence_key')->references('sequence_key')
-                ->on(Helper::table('branches'))
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+            $table->timestamps();  
         }); 
     }
 

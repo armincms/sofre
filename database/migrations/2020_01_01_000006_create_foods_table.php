@@ -29,14 +29,7 @@ class CreateFoodsTable extends Migration
             $table->string('sequence_key')->nullable();
 
             $table->softDeletes();
-            $table->timestamps();
-
-
-            $table
-                ->foreign('sequence_key')->references('sequence_key')
-                ->on(Helper::table('foods'))
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+            $table->timestamps(); 
 
             $table
                 ->foreign('food_group_id')->references('id')

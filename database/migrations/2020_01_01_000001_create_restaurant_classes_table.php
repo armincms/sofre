@@ -21,13 +21,7 @@ class CreateRestaurantClassesTable extends Migration
             $table->abstract(); 
             $table->string('sequence_key')->nullable();
             $table->timestamps();  
-            $table->softDeletes(); 
-
-            $table
-                ->foreign('sequence_key')->references('sequence_key')
-                ->on(Helper::table('restaurant_classes'))
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+            $table->softDeletes();  
         });
     }
 
