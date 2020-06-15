@@ -17,8 +17,16 @@ class CreateFoodGroupsTable extends Migration
         Schema::create(Helper::table('food_groups'), function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->auth();
+            $table->resource();
+            $table->string('sequence_key')->nullable();
             $table->timestamps();  
             $table->softDeletes(); 
+
+            $table
+                ->foreign('sequence_key')->references('sequence_key')
+                ->on(Helper::table('food_groups'))
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 

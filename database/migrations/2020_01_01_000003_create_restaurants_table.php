@@ -44,6 +44,8 @@ class CreateRestaurantsTable extends Migration
                 'credit',
             ]));  
 
+            $table->description();    
+            $table->string('address')->nullable();
             $table->timestamps();
 
             $table
@@ -61,6 +63,12 @@ class CreateRestaurantsTable extends Migration
             $table
                 ->foreign('restaurant_class_id')->references('id')
                 ->on(Helper::table('restaurant_classes'))
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
+            $table
+                ->foreign('sequence_key')->references('sequence_key')
+                ->on(Helper::table('restaurants'))
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         }); 

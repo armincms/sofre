@@ -21,12 +21,22 @@ class CreateFoodsTable extends Migration
             $table->integer('duration')->default(0)->unsigned(); 
             $table->string('currency')->default('IRR'); 
             $table->auth();  
+            $table->resource();
+            $table->json('material')->default('[]'); 
 
             $table->unsignedBigInteger('food_group_id')->nullable(); 
             $table->unsignedBigInteger('restaurant_id')->nullable(); 
+            $table->string('sequence_key')->nullable();
 
             $table->softDeletes();
             $table->timestamps();
+
+
+            $table
+                ->foreign('sequence_key')->references('sequence_key')
+                ->on(Helper::table('food_groups'))
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
 
             $table
                 ->foreign('food_group_id')->references('id')
