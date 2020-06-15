@@ -33,6 +33,7 @@ class ToolServiceProvider extends AuthServiceProvider
     { 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'sofre');
         $this->loadJsonTranslationsFrom(__DIR__.'/../resources/lang'); 
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         LaravelNova::serving([$this, 'servingNova']); 
     } 
 
