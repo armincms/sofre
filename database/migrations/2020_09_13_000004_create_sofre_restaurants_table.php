@@ -49,6 +49,7 @@ class CreateSofreRestaurantsTable extends Migration
             $table->description();    
             $table->string('address')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table
                 ->foreign('branch_id')->references('id')

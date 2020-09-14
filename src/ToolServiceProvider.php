@@ -41,7 +41,7 @@ class ToolServiceProvider extends AuthServiceProvider
     {
         LaravelNova::resources([
             Nova\Branch::class, 
-            // Nova\Restaurant::class,
+            Nova\Restaurant::class,
             Nova\FoodGroup::class, 
             Nova\Food::class,
             // Nova\Category::class,

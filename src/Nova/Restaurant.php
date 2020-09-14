@@ -5,21 +5,9 @@ namespace Armincms\Sofre\Nova;
 use Armincms\Tab\Tab;
 use Armincms\Json\Json;
 use Armincms\Sofre\Helper;
-use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Text; 
-use Laravel\Nova\Fields\Textarea; 
-use Laravel\Nova\Fields\KeyValue; 
-use Laravel\Nova\Fields\Number; 
-use Laravel\Nova\Fields\Boolean; 
-use Laravel\Nova\Fields\Heading;  
-use Laravel\Nova\Fields\Select;   
-use Laravel\Nova\Fields\BelongsTo;   
-use Laravel\Nova\Fields\BelongsToMany;   
-use GeneaLabs\NovaGutenberg\Gutenberg;
-use Laravel\Nova\Fields\MorphedByMany; 
+use Laravel\Nova\Fields\{ID, Text, Textarea, KeyValue, Number, Boolean, Heading, Select, BelongsTo, BelongsToMany};    
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Illuminate\Http\Request;
-use Armincms\Facility\Facility;
+use Illuminate\Http\Request; 
 use OptimistDigital\MultiselectField\Multiselect;
 use Benjacho\BelongsToManyField\BelongsToManyField; 
 use Armincms\Location\Nova\Zone;  
@@ -27,6 +15,7 @@ use Laraning\NovaTimeField\TimeField;
 use Armincms\Nova\Fields\Images;
 use Armincms\Nova\Fields\Video; 
 use OwenMelbz\RadioField\RadioButton; 
+use Armincms\Fields\Targomaan;
 
 
 class Restaurant extends Resource  
@@ -36,7 +25,7 @@ class Restaurant extends Resource
      *
      * @var string
      */
-    public static $model = 'Armincms\Sofre\Restaurant';  
+    public static $model = \Armincms\Sofre\Restaurant::class;  
 
     /**
      * Build a "relatable" query for the given resource.
@@ -62,14 +51,25 @@ class Restaurant extends Resource
      */
     public function fields(Request $request)
     {
-        return array_merge(
-            Tab::make('primary', function($tab) {
-                $tab->group(__('General'), [$this, 'generalFeilds']);
-                $tab->group(__('Payment'), [$this, 'paymentFeilds']);
-                $tab->group(__('Media'), [$this, 'mediaFeilds']); 
-                // $tab->group(__('SEO'), [$this, 'seoFields']);
-            })->toArray(), $this->relations()
-        );
+        return [
+            ID::make()
+                ->sortable(),
+
+            new Targomaan([
+                Text::make(__('Name'), 'name')
+                    ->required()
+                    ->rules('required')
+            ]),
+
+        ];
+        // return array_merge(
+        //     Tab::make('primary', function($tab) {
+        //         $tab->group(__('General'), [$this, 'generalFeilds']);
+        //         $tab->group(__('Payment'), [$this, 'paymentFeilds']);
+        //         $tab->group(__('Media'), [$this, 'mediaFeilds']); 
+        //         // $tab->group(__('SEO'), [$this, 'seoFields']);
+        //     })->toArray(), $this->relations()
+        // );
     } 
 
     public function generalFeilds()
