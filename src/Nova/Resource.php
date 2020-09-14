@@ -20,17 +20,8 @@ abstract class Resource extends ArminResource
      * @var array
      */
     public static $search = [
-        'id'
-    ];
-
-    /**
-     * The columns that should be searched in the translation table.
-     *
-     * @var array
-     */
-    public static $searchTranslations = [
-        'name'
-    ];
+        'id', 'name'
+    ]; 
 
     /**
      * The logical group associated with the resource.
@@ -38,4 +29,14 @@ abstract class Resource extends ArminResource
      * @var string
      */
     public static $group = 'Restaurant Services'; 
+
+    /**
+     * Get the URI key for the resource.
+     *
+     * @return string
+     */
+    public static function uriKey()
+    {
+        return 'sofre-' . parent::uriKey();
+    }
 }

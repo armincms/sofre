@@ -1,31 +1,26 @@
 <?php
-namespace Armincms\Sofre; 
-       
 
-class Branch extends Model 
-{    
+namespace Armincms\Sofre;
+    
+
+class RestaurantType extends Model 
+{   
     protected $medias = [
-        'logo' => [ 
+        'image' => [ 
             'disk'  => 'armin.image',
             'schemas' => [
                 'logo', 'icon', 'thumbnail'
             ]
         ], 
-        'image' => [ 
-            'disk'  => 'armin.image',
-            'schemas' => [
-                'sofre.branche', '*'
-            ]
-        ]
     ]; 
 
     /**
-     * The `restaurants` relationships
+     * The `restaurants` relationship.
      * 
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function restaurants()
     {
         return $this->hasMany(Restaurant::class);
-    }
+    } 
 }

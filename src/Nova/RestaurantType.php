@@ -3,20 +3,17 @@
 namespace Armincms\Sofre\Nova;
  
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Text; 
-use Laravel\Nova\Fields\Number; 
-use Laravel\Nova\Http\Requests\NovaRequest;
-use Armincms\Nova\Fields\Images;
+use Laravel\Nova\Fields\{ID, Text}; 
+use Armincms\Fields\Targomaan;
 
-class RestaurantClass extends Resource
+class RestaurantType extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'Armincms\Sofre\RestaurantClass'; 
+    public static $model = \Armincms\Sofre\RestaurantType::class; 
 
     /**
      * Get the fields displayed by the resource.
@@ -29,9 +26,13 @@ class RestaurantClass extends Resource
         return [
             ID::make()->sortable(), 
             
-            $this->abstracts(),
+            new Targomaan([
+                Text::make(__('Name'), 'name')
+                    ->required()
+                    ->rules('required')
+            ]),
 
-            $this->imageField('logo', __("Logo")),
+            $this->imageField(),
         ];
     } 
 }

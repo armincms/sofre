@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Armincms\Sofre\Helper;
 
-class CreateFoodGroupsTable extends Migration
+class CreateSofreFoodGroupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -17,8 +17,7 @@ class CreateFoodGroupsTable extends Migration
         Schema::create(Helper::table('food_groups'), function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->auth();
-            $table->resource();
-            $table->string('sequence_key')->nullable();
+            $table->json('name')->nullable(); 
             $table->timestamps();  
             $table->softDeletes();  
         });

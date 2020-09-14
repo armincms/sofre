@@ -1,31 +1,27 @@
 <?php
 namespace Armincms\Sofre; 
   
-use Illuminate\Database\Eloquent\Model as LaravelModel;  
+use Illuminate\Database\Eloquent\{Model as LaravelModel, SoftDeletes}; 
+use Spatie\MediaLibrary\HasMedia\HasMedia;  
+use Armincms\Targomaan\Concerns\InteractsWithTargomaan; 
+use Armincms\Targomaan\Contracts\Translatable;  
+use Armincms\Concerns\IntractsWithMedia; 
 use Armincms\Contracts\Authorizable;
 use Armincms\Concerns\Authorization; 
-use Armincms\Localization\Concerns\HasTranslation; 
-use Armincms\Localization\Contracts\Translatable; 
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Armincms\Concerns\IntractsWithMedia;
-use Spatie\MediaLibrary\HasMedia\HasMedia;  
 
 class Model extends LaravelModel implements Authorizable, Translatable, HasMedia
 {   
-    use Authorization, HasTranslation, SoftDeletes, IntractsWithMedia;
-     
-    protected $with = [
-        'translations', 'user'
-    ];    
-
+    use Authorization, InteractsWithTargomaan, SoftDeletes, IntractsWithMedia; 
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $guard = [];  
-
+    protected $casts = [
+        'name' => 'json',
+    ];
+    
     /**
      * The related medias.
      *
@@ -41,15 +37,5 @@ class Model extends LaravelModel implements Authorizable, Translatable, HasMedia
     public function getTable()
     {
         return Helper::table(parent::getTable());
-    } 
-
-    /**
-     * Get Translation model instance.
-     * 
-     * @return \Illuminate\Database\Eloquent\Model
-     */
-    public function getTranslationModel()
-    {
-        return Translation::withSluggable('name');
-    }
+    }  
 }

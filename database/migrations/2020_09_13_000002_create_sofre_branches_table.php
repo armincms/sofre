@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Armincms\Sofre\Helper;
 
-class CreateRestaurantClassesTable extends Migration
+class CreateSofreBranchesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,15 +14,14 @@ class CreateRestaurantClassesTable extends Migration
      */
     public function up()
     {
-        Schema::create(Helper::table('restaurant_classes'), function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create(Helper::table('branches'), function (Blueprint $table) {
+            $table->bigIncrements('id');  
+            $table->hits();  
             $table->auth();
-            $table->hits();
-            $table->abstract(); 
-            $table->string('sequence_key')->nullable();
+            $table->json('name')->nullable();     
+            $table->softDeletes();
             $table->timestamps();  
-            $table->softDeletes();  
-        });
+        }); 
     }
 
     /**
@@ -32,6 +31,6 @@ class CreateRestaurantClassesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(Helper::table('restaurant_classes'));
+        Schema::dropIfExists(Helper::table('branches'));
     }
 }

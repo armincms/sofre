@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Armincms\Sofre\Helper;
 
-class CreateRestaurantsTable extends Migration
+class CreateSofreRestaurantsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -22,27 +22,29 @@ class CreateRestaurantsTable extends Migration
             $table->boolean('center')->default(false);
             $table->unsignedBigInteger('branch_id')->nullable();
             $table->unsignedBigInteger('zone_id')->nullable();
-            $table->unsignedBigInteger('restaurant_class_id')->nullable();
+            $table->unsignedBigInteger('restaurant_type_id')->nullable();
+            $table->string('marked_as')->default('pending');
+            $table->string('sequence_key')->nullable();
 
-            $table->publication([
-                'pending', 'approved', 'closed'
-            ]);    
+            // $table->publication([
+            //     'pending', 'approved', 'closed'
+            // ]);    
             
-            $table->json('contacts')->default(json_encode([])); 
+            $table->json('contacts')->nullable(); 
 
-            $table->json('sending_method')->default(json_encode([
+            $table->json('sending_method')->nullable()/*->default(json_encode([
                 'send',
                 'serve',
                 'delivery',
                 'courier',
-            ]));  
+            ]))*/;  
 
-            $table->json('payment_method')->default(json_encode([
+            $table->json('payment_method')->nullable()/*->default(json_encode([
                 'pos',
                 'online',
                 'cash',
                 'credit',
-            ]));  
+            ]))*/;  
 
             $table->description();    
             $table->string('address')->nullable();
@@ -61,8 +63,8 @@ class CreateRestaurantsTable extends Migration
                 ->onUpdate('cascade');
 
             $table
-                ->foreign('restaurant_class_id')->references('id')
-                ->on(Helper::table('restaurant_classes'))
+                ->foreign('restaurant_type_id')->references('id')
+                ->on(Helper::table('restaurant_types'))
                 ->onDelete('cascade')
                 ->onUpdate('cascade'); 
         }); 

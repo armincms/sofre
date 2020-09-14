@@ -2,10 +2,9 @@
 
 namespace Armincms\Sofre\Nova;
 
-use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\HasMany;
 use Illuminate\Http\Request; 
+use Laravel\Nova\Fields\{ID, Text, HasMany}; 
+use Armincms\Fields\Targomaan;
 
 class Branch extends Resource
 {
@@ -15,7 +14,7 @@ class Branch extends Resource
      *
      * @var string
      */
-    public static $model = 'Armincms\Sofre\Branch';    
+    public static $model = \Armincms\Sofre\Branch::class;    
 
     /**
      * Get the fields displayed by the resource.
@@ -28,13 +27,17 @@ class Branch extends Resource
         return [
             ID::make()->sortable(),
 
-            $this->abstracts(), 
+            new Targomaan([
+                Text::make(__('Name'), 'name')
+                    ->required()
+                    ->rules('required'),
+            ]), 
 
             $this->imageField(),
 
-            $this->imageField('logo', "Logo"),
+            $this->imageField('Logo', 'logo'),
 
-            HasMany::make(__("Restaurants"), 'restaurants', Restaurant::class),
+            // HasMany::make(__("Restaurants"), 'restaurants', Restaurant::class),
         ];
     }
 

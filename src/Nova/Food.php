@@ -2,18 +2,15 @@
 
 namespace Armincms\Sofre\Nova;
  
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Illuminate\Http\Request;
-use Armincms\Sofre\Helper;
-use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\Number;
-use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Fields\BelongsTo;  
 use Laravel\Nova\Fields\KeyValue; 
-use Laravel\Nova\Fields\BelongsTo; 
-use Laravel\Nova\Fields\BelongsToMany;  
-use Armincms\Nova\Fields\Images;
+use Laravel\Nova\Fields\Boolean; 
+use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\ID;
+use Armincms\Fields\{Targomaan, BelongsToMany};
+use Armincms\Sofre\Helper;
 
 class Food extends Resource
 {
@@ -22,7 +19,7 @@ class Food extends Resource
      *
      * @var string
      */
-    public static $model = 'Armincms\Sofre\Food'; 
+    public static $model = \Armincms\Sofre\Food::class; 
 
     /**
      * The relationships that should be eager loaded when performing an index query.
@@ -30,16 +27,7 @@ class Food extends Resource
      * @var array
      */
     public static $with = [
-        'restaurant', 'group'
-    ];
-
-    /**
-     * The columns that should be searched.
-     *
-     * @var array
-     */
-    public static $search = [
-        'id',
+        'group'
     ]; 
 
     /**
@@ -50,7 +38,7 @@ class Food extends Resource
      */
     public function fields(Request $request)
     {   
-        return collect([
+        return [
             ID::make()
                 ->sortable()
                 ->hideFromIndex((Boolean) request('viaResourceId')),
@@ -58,69 +46,55 @@ class Food extends Resource
             BelongsTo::make(__("Food Group"), 'group', FoodGroup::class)
                 ->rules('required')
                 ->sortable()
-                ->withoutTrashed(),
+                ->withoutTrashed(), 
 
-            BelongsTo::make(__("Restaurant"), 'restaurant', Restaurant::class)
-                ->nullable()
-                ->hideFromIndex()
-                ->withoutTrashed(),
-
-            $this->translatable([
+            new Targomaan([
                 Text::make(__('Name'), 'name')
                     ->sortable()
-                    ->required(),
+                    ->required()
+                    ->rules('required'),
 
                 KeyValue::make(__('Material'), 'material')
                     ->hideFromIndex()
                     ->keyLabel(__("Material"))
-                    ->actionText(__("Add")),
-            ])->withToolbar(), 
+                    ->actionText(__("Add Material")),
+            ]),  
 
-            Number::make(__("Preparation Time"), "duration")
-                ->rules("required", "min:0")
-                ->required()
-                ->default(0)
-                ->help(__("Duration Of Making Food At Minute"))
-                ->withMeta([
-                    'min' => 0
-                ])->displayUsing(function($value) {
-                    return $value . PHP_EOL . __("Minute");
-                })
-                ->hideFromIndex((Boolean) request('viaResourceId')),
+            $this->imageField(),
+        ];
+        // return collect([
+        //     ID::make()
+        //         ->sortable()
+        //         ->hideFromIndex((Boolean) request('viaResourceId')),
 
-            $this->priceField() 
-                ->onlyOnForms()
-                ->help(currency()->getCurrency('IRR')['symbol']), 
+        //     BelongsTo::make(__("Food Group"), 'group', FoodGroup::class)
+        //         ->rules('required')
+        //         ->sortable()
+        //         ->withoutTrashed(), 
 
-            // Select::make(__("Currency"), "currency")->options(
-            //     collect(currency()->getActiveCurrencies())->map->symbol
-            // )->rules('required')->default('IRR')->onlyOnForms(),
+        //     new Targomaan([
+        //         Text::make(__('Name'), 'name')
+        //             ->sortable()
+        //             ->required(),
 
-            $this->priceField()
-                ->hideFromIndex((Boolean) request('viaResourceId')),
- 
-            $this->discountField(),  
+        //         KeyValue::make(__('Material'), 'material')
+        //             ->hideFromIndex()
+        //             ->keyLabel(__("Material"))
+        //             ->actionText(__("Add")),
+        //     ]),   
 
-            BelongsToMany::make("Restaurants", 'restaurants', Restaurant::class)
-                ->actions(function() {
-                    return [
-                        new Actions\Available,
-                        new Actions\Unavailable,
-                    ];
-                })
-                ->hideFromIndex(true),
+        //     // BelongsToMany::make("Restaurants", 'restaurants', Restaurant::class)
+        //     //     ->actions(function() {
+        //     //         return [
+        //     //             new Actions\Available,
+        //     //             new Actions\Unavailable,
+        //     //         ];
+        //     //     })
+        //     //     ->hideFromIndex(true),
 
-            Images::make(__("Image"), 'image')
-                ->conversionOnPreview('main') 
-                ->conversionOnDetailView('thumbnail') 
-                ->conversionOnIndexView('icon')
-                ->fullSize(),
+        //     $this->imageField(), 
 
-            Boolean::make(__("Available"), 'pivot->available') 
-                ->onlyOnIndex()
-                ->showOnIndex((boolean) request('viaResourceId'))
-
-        ])->merge($this->mealFields())->all();
+        // ])->merge($this->mealFields())->all();
     }
 
     public function mealFields()
@@ -183,10 +157,10 @@ class Food extends Resource
     public function actions(Request $request)
     {
         return [
-            (new Actions\Replicate)
-                ->canRun(function() {
-                    return true;
-                })
+            // (new Actions\Replicate)
+            //     ->canRun(function() {
+            //         return true;
+            //     })
         ];
 
     }

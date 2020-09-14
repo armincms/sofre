@@ -16,12 +16,12 @@ class ToolServiceProvider extends AuthServiceProvider
      * @var array
      */
     protected $policies = [ 
-        Food::class =>  Policies\FoodPolicy::class,
-        Branch::class =>  Policies\BranchPolicy::class,
-        FoodGroup::class =>  Policies\FoodGroupPolicy::class, 
-        Restaurant::class =>  Policies\RestaurantPolicy::class, 
-        RestaurantClass::class =>  Policies\RestaurantClassPolicy::class, 
-        WorkingDayClass::class =>  Policies\WorkingDayClassPolicy::class,  
+        Food::class           =>  Policies\FoodPolicy::class,
+        Branch::class         =>  Policies\BranchPolicy::class,
+        FoodGroup::class      =>  Policies\FoodGroupPolicy::class, 
+        WorkingDay::class     =>  Policies\WorkingDayPolicy::class,  
+        Restaurant::class     =>  Policies\RestaurantPolicy::class, 
+        RestaurantType::class =>  Policies\RestaurantTypePolicy::class, 
     ];
 
     /**
@@ -41,23 +41,13 @@ class ToolServiceProvider extends AuthServiceProvider
     {
         LaravelNova::resources([
             Nova\Branch::class, 
-            Nova\Restaurant::class,
+            // Nova\Restaurant::class,
             Nova\FoodGroup::class, 
             Nova\Food::class,
-            Nova\Category::class,
-            Nova\RestaurantClass::class, 
-            Nova\WorkingDay::class, 
-            Nova\Setting::class, 
+            // Nova\Category::class,
+            Nova\RestaurantType::class, 
+            // Nova\WorkingDay::class, 
+            // Nova\Setting::class, 
         ]);   
-    }
-
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
-    }
+    } 
 }
