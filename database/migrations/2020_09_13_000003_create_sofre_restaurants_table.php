@@ -15,16 +15,17 @@ class CreateSofreRestaurantsTable extends Migration
     public function up()
     {
         Schema::create(Helper::table('restaurants'), function (Blueprint $table) {
-            $table->bigIncrements('id'); 
-            $table->hits();       
-            $table->coordinates();       
+            $table->bigIncrements('id');    
             $table->smallPrice('min_order'); 
-            $table->boolean('center')->default(false);
-            $table->unsignedBigInteger('branch_id')->nullable();
+            $table->boolean('center')->default(false); 
             $table->unsignedBigInteger('zone_id')->nullable();
+            $table->unsignedBigInteger('chain_id')->nullable();
             $table->unsignedBigInteger('restaurant_type_id')->nullable();
-            $table->string('marked_as')->default('pending');
+            $table->boolean('online')->default(true);
             $table->string('sequence_key')->nullable();
+            $table->hits();       
+            $table->auth();       
+            $table->coordinates();    
 
             // $table->publication([
             //     'pending', 'approved', 'closed'
@@ -45,23 +46,25 @@ class CreateSofreRestaurantsTable extends Migration
                 'cash',
                 'credit',
             ]))*/;  
-
-            $table->description();    
+ 
+            $table->string('name')->nullable();  
+            $table->string('locale')->default(app()->getLocale());  
+            $table->visiting();  
             $table->string('address')->nullable();
             $table->timestamps();
-            $table->softDeletes();
-
-            $table
-                ->foreign('branch_id')->references('id')
-                ->on(Helper::table('branches'))
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+            $table->softDeletes(); 
 
             $table
                 ->foreign('zone_id')->references('id')
                 ->on('locations')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
+
+            $table
+                ->foreign('chain_id')->references('id')
+                ->on(Helper::table('restaurants'))
+                ->onDelete('cascade')
+                ->onUpdate('cascade'); 
 
             $table
                 ->foreign('restaurant_type_id')->references('id')

@@ -12,26 +12,45 @@ class Helper
         return (Str::startsWith($table, $prefix) ? '' : $prefix).$table;
     }
 
-    static public function days()
+    public static function sendingMethod()
     {
         return [
-            'saturday'  => 'Saturday', 
-            'sunday'    => 'Sunday', 
-            'monday'    => 'Monday', 
-            'tuesday'   => 'Tuesday', 
-            'wednesday' => 'Wednesday', 
-            'thursday'  => 'Thursday', 
-            'friday'    => 'Friday'
+            'serve'     => __('Serve'),
+            'delivery'  => __('Delivery At Restaurant'),
+            'courier'   => __('Courier'),
         ];
     }
 
-    static public function meals()
+    public static function paymentMethods()
     {
         return [
-            'breakfast' => 'Breakfast', 
-            'lunch'     => 'Lunch', 
-            'evening'   => 'Evening', 
-            'dinner'    => 'Dinner',
+            'pos'      => __('POS'),
+            'online'   => __('Online'),
+            'cash'     => __('Cash'),
+            'credit'   => __('Credit'),
+        ];
+    }
+
+    public static function days()
+    {
+        return [
+            'saturday'  => __('Saturday'), 
+            'sunday'    => __('Sunday'), 
+            'monday'    => __('Monday'), 
+            'tuesday'   => __('Tuesday'), 
+            'wednesday' => __('Wednesday'), 
+            'thursday'  => __('Thursday'), 
+            'friday'    => __('Friday')
+        ];
+    }
+
+    public static function meals()
+    {
+        return [
+            'breakfast' => __('Breakfast'), 
+            'lunch'     => __('Lunch'), 
+            'evening'   => __('Evening'), 
+            'dinner'    => __('Dinner'),
         ]; 
     }
 

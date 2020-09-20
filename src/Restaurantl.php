@@ -4,11 +4,12 @@ namespace Armincms\Sofre;
 use Core\HttpSite\Concerns\Visiting;
 use Core\HttpSite\Concerns\IntractsWithSite;
 use Core\HttpSite\Component;  
+use Armincms\Categorizable\Categorizable; 
 use Armincms\Location\Location; 
 
 class Restaurant extends Model 
 {  
-    use Permalink, Visiting, IntractsWithSite;  
+    use Permalink, Visiting, IntractsWithSite, Categorizable;  
 
     protected $append = [
         'menu', 'service_range', 'serving_start', 'serving_end'

@@ -34,8 +34,18 @@ class ToolServiceProvider extends AuthServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'sofre');
         $this->loadJsonTranslationsFrom(__DIR__.'/../resources/lang'); 
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->configureWebComponents();
         LaravelNova::serving([$this, 'servingNova']); 
     } 
+
+    public function configureWebComponents()
+    { 
+        \Site::push('sofre', function($blog) {
+            $blog->directory('sofre');
+ 
+            $blog->pushComponent(new Components\Restaurant);
+        });
+    }
 
     public function servingNova(ServingNova $event)
     {
@@ -44,7 +54,7 @@ class ToolServiceProvider extends AuthServiceProvider
             Nova\Restaurant::class,
             Nova\FoodGroup::class, 
             Nova\Food::class,
-            // Nova\Category::class,
+            Nova\Category::class,
             Nova\RestaurantType::class, 
             // Nova\WorkingDay::class, 
             // Nova\Setting::class, 

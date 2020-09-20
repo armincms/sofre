@@ -7,7 +7,7 @@ use Illuminate\Database\Migrations\Migration;
 use Armincms\Sofre\Restaurant;
 use Armincms\Sofre\Helper;
 
-class CreateRestaurantWorkingDayTable extends Migration
+class CreateSofreRestaurantWorkingDayTable extends Migration
 {
     /**
      * Run the migrations.
@@ -18,13 +18,9 @@ class CreateRestaurantWorkingDayTable extends Migration
     {
         Schema::create(Helper::table('restaurant_working_day'), function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('description')->nullable();  
+            $table->string('note')->nullable();  
 
-            foreach (Helper::meals() as $name => $meal) {
-                $table
-                    ->json($name)
-                    ->default(json_encode(Helper::defaultMealDuration($name)));   
-            } 
+            collect(Helper::meals())->keys()->each([$table, 'json']);
 
             $table->unsignedBigInteger('working_day_id');
             $table->unsignedBigInteger('restaurant_id');

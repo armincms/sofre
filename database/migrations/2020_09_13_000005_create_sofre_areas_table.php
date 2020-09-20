@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Armincms\Sofre\Helper; 
 
-class CreateRestaurantLocationTable extends Migration
+class CreateSofreAreasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,11 +14,11 @@ class CreateRestaurantLocationTable extends Migration
      */
     public function up()
     {
-        Schema::create(Helper::table('restaurant_location'), function (Blueprint $table) {
+        Schema::create(Helper::table('areas'), function (Blueprint $table) {
             $table->bigIncrements('id');   
             $table->smallPrice('cost');
             $table->integer('duration')->default(0);
-            $table->string('description', 250)->nullable(); 
+            $table->string('note', 250)->nullable(); 
             
             $table->unsignedBigInteger('location_id')->nullable(); 
             $table->unsignedBigInteger('restaurant_id')->nullable();  
@@ -44,6 +44,6 @@ class CreateRestaurantLocationTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(Helper::table('restaurant_location'));
+        Schema::dropIfExists(Helper::table('areas'));
     }
 }

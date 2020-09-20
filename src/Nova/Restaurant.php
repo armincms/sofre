@@ -1,21 +1,20 @@
 <?php
 
 namespace Armincms\Sofre\Nova;
- 
-use Armincms\Tab\Tab;
+  
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Laravel\Nova\Panel;    
+use Laravel\Nova\Http\Requests\NovaRequest; 
+use Laravel\Nova\Fields\{ID, Text, Textarea, Number, Boolean, Select, BelongsTo, BelongsToMany}; 
+use Inspheric\Fields\Url; 
+use Laraning\NovaTimeField\TimeField; 
+use OwenMelbz\RadioField\RadioButton;   
+use OptimistDigital\MultiselectField\Multiselect; 
+use Armincms\Fields\{Targomaan, BelongsToMany as ManyToMany};
+use Armincms\Location\Nova\Zone;  
 use Armincms\Json\Json;
 use Armincms\Sofre\Helper;
-use Laravel\Nova\Fields\{ID, Text, Textarea, KeyValue, Number, Boolean, Heading, Select, BelongsTo, BelongsToMany};    
-use Laravel\Nova\Http\Requests\NovaRequest;
-use Illuminate\Http\Request; 
-use OptimistDigital\MultiselectField\Multiselect;
-use Benjacho\BelongsToManyField\BelongsToManyField; 
-use Armincms\Location\Nova\Zone;  
-use Laraning\NovaTimeField\TimeField;
-use Armincms\Nova\Fields\Images;
-use Armincms\Nova\Fields\Video; 
-use OwenMelbz\RadioField\RadioButton; 
-use Armincms\Fields\Targomaan;
 
 
 class Restaurant extends Resource  
@@ -44,6 +43,22 @@ class Restaurant extends Resource
     }
 
     /**
+     * Build a "relatable" query for the given resource.
+     *
+     * This query determines which instances of the model may be attached to other resources.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public static function relatableRestaurants(NovaRequest $request, $query)
+    {
+        return parent::relatableQuery($request, $query) 
+                    ->whereCenter(1)
+                    ->authenticate();
+    }
+
+    /**
      * Get the fields displayed by the resource.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -53,184 +68,129 @@ class Restaurant extends Resource
     {
         return [
             ID::make()
-                ->sortable(),
-
-            new Targomaan([
-                Text::make(__('Name'), 'name')
-                    ->required()
-                    ->rules('required')
-            ]),
-
-        ];
-        // return array_merge(
-        //     Tab::make('primary', function($tab) {
-        //         $tab->group(__('General'), [$this, 'generalFeilds']);
-        //         $tab->group(__('Payment'), [$this, 'paymentFeilds']);
-        //         $tab->group(__('Media'), [$this, 'mediaFeilds']); 
-        //         // $tab->group(__('SEO'), [$this, 'seoFields']);
-        //     })->toArray(), $this->relations()
-        // );
-    } 
-
-    public function generalFeilds()
-    {
-        return $this->merge([
-            ID::make()->sortable(), 
-
-            BelongsTo::make(__("Restaurant Class"), 'restaurantClass', RestaurantClass::class)
-                ->required()
-                ->withoutTrashed(),
-
-            Select::make(__("Status"), 'status')
-                ->options([
-                    'pending' => __("Pending"),
-                    'approved' => __("Approved"),
-                    'closed' => __("Closed"),
-                ])
-                ->default('pending')
-                ->rules('required'),
+                ->sortable(),  
 
             RadioButton::make(__("Branch"), 'center')
                 ->options([
                     '0' => __("Independent"),
-                    '1' => __("Central Branch"),
-                    'false' => __("Under The Branch") 
+                    'false' => __("Branch"),
+                    '1' => __("Chained"),
                 ])
                 ->default(request()->viaResourceId ? 'false' : '0')
-                ->marginBetween() 
+                ->marginBetween()  
                 ->toggle([ 
-                    '0' => ['branch'], 
+                    '0' => ['chain', 'branch'], 
+                    '1' => ['branch', 'type', 'chain', 'foods', 'areas', 'sending_method', 'payment_method', 'image', 'online'], 
+                    'false' => ['name'], 
                 ])
                 ->fillUsing(function($request, $model) { 
-                    $model->center = boolval($request->center);   
+                    $model->center = intval($request->center);   
+                })
+                ->resolveUsing(function($value, $resource, $attribute) { 
+                    return intval($value) ? '1' : (intval($resource->chain_id) ? 'false' : '0');
                 }),
 
-
-            BelongsTo::make(__("Branch Name"), 'branch', Branch::class)
+            BelongsTo::make(__('Restaurant Type'), 'type', RestaurantType::class)
                 ->withoutTrashed()
-                ->withMeta([
-                    'singularLabel' => __("Branch Name")
-                ])
-                ->nullable(),
+                ->required() 
+                ->nullable(intval($request->get('center')) === 1),
+
+            BelongsTo::make(__('Chain'), 'chain', Restaurant::class)
+                ->withoutTrashed() 
+                ->nullable(! $this->isBranchRequest($request)), 
+
+            Text::make(__('Name'), 'name')
+                ->required()
+                ->rules($this->isBranchRequest($request) ? null : 'required')
+                ->onlyOnForms(),
+
+            Text::make(__('Branch Name'), 'branch')
+                ->required()
+                    ->rules($this->isBranchRequest($request) ? 'required' : null)
+                ->onlyOnForms()
+                ->fillUsing(function($request, $model, $attribute, $requestAttribute) {
+                    if($this->isBranchRequest($request)) {
+                        $model->name = $request->get($attribute); 
+                    }
+                })
+                ->resolveUsing(function($value, $resource, $attribute) {
+                    return $resource->name;
+                })
+                ->help(__('This name comes after the branch name')), 
+
+            ManyToMany::make(__('Categories'), 'categories', Category::class) 
+                ->hideFromIndex(),  
+            
+            ManyToMany::make(__('Menu'), 'foods', Food::class)
+                ->fields(new Fields\Menu)
+                ->pivots()
+                ->fillUsing(function($pivots) {
+                    return collect($pivots)->map(function($pivot) {
+                        return is_array($pivot) ? implode(',', $pivot) : $pivot;
+                    })->all();
+                })
+                ->hideFromIndex(),
+
+            BelongsToMany::make(__('Menu'), 'foods', Food::class)
+                ->fields(new Fields\Menu), 
 
 
-
-            // BelongsToManyField::make(__("Categories"), 'categories', Category::class), 
-
-
-            $this->descriptions(),   
-        ]);
-    }
-
-    public function paymentFeilds()
-    {
-        return $this->merge([
+            ManyToMany::make(__("Service Areas"), 'areas', Zone::class)
+                ->fields(new Fields\Areas)
+                ->pivots()
+                ->hideFromIndex(),
+            
             Multiselect::make(__("Sending Method"), 'sending_method')
-                ->options([
-                    'serve'     => __('Serve'),
-                    'delivery'  => __('Delivery At Restaurant'),
-                    'courier'   => __('Courier'),
-                ])
-                ->default(['serve', 'delivery', 'courier'])
+                ->options($sendingMethods = Helper::sendingMethod())
+                ->default(array_keys($sendingMethods))
                 ->rules('required')
-                ->saveAsJSON(),
+                ->saveAsJSON()
+                ->hideFromIndex(),
 
             Multiselect::make(__("Payment Method"), 'payment_method')
-                ->options([
-                    'pos'      => __('POS'),
-                    'online'   => __('Online'),
-                    'cash'     => __('Cash'),
-                    'credit'   => __('Credit'),
-                ])
-                ->default(['pos', 'online', 'cash'])
+                ->options($paymentMethods = Helper::paymentMethods())
+                ->default(array_keys($paymentMethods))
                 ->rules('required')
-                ->saveAsJSON(), 
-        ]);
-    }
+                ->saveAsJSON()
+                ->hideFromIndex(), 
 
-    public function mediaFeilds()
-    {
-        return $this->merge([
-            Images::make(__("Logo"), 'logo') 
-                ->conversionOnPreview('icon') 
-                ->conversionOnDetailView('thumbnail') 
-                ->conversionOnIndexView('thumbnail'),
+            Number::make(__('Hits'), 'hits')
+                ->exceptOnForms(), 
 
-            Video::make(__("Video"), 'video') 
-                ->conversionOnPreview('thumbnail') 
-                ->conversionOnDetailView('thumbnail') 
-                ->conversionOnIndexView('thumbnail')     
-                ->hideFromIndex(),
+            new Panel(__('Media'), [
+               $this->imageField(__('Logo'), 'logo'),
 
-            Images::make(__("Gallery"), 'gallery') 
-                ->conversionOnPreview('main') 
-                ->conversionOnDetailView('thumbnail') 
-                ->conversionOnIndexView('thumbnail')    
-                ->fullSize()
-                ->stacked()
-                ->hideFromIndex(),
-        ]);
+               $this->imageField(__('Featured Image'))
+                    ->hideFromIndex(),
+            ]),
+
+            new Panel(__('Contacts'), [  
+                BelongsTo::make(__('Restaurant Location'), 'zone', Zone::class)
+                    ->withoutTrashed(),
+
+                Text::make(__('Restaurant Address'), 'contacts->address'),
+
+                Url::make(__('Restaurant Website'), 'contacts->url'),
+
+                Url::make(__('Phone Number'), 'contacts->phone'),
+            ]), 
+
+            new Panel(__('Configuration'), [  
+                Boolean::make(__('Online'), 'online') 
+                    ->required()
+                    ->rules('required')
+                    ->default(false),
+            ]), 
+        ]; 
     } 
 
-    public function seoFields()
+    public function isUpdateOrCreationRequest(Request $request)
     {
-        return $this->translatable([
-            Json::make('seo', [
-                Text::make(__('Title'), 'title')->sortable(),
-                Textarea::make(__('Description'), 'description')->sortable(),
-            ]),
-        ]);
-    }
+        return $request->isCreateOrAttachRequest() || $request->isUpdateOrUpdateAttachedRequest();
+    }  
 
-    public function relations()
-    { 
-        return [ 
-            BelongsToMany::make(__("Food"), 'foods', Food::class)->fields(function(){  
-                $meals = collect(Helper::days())->map(function($label, $day) {
-                    return Multiselect::make(__($label), $day)
-                                ->options(Helper::meals())
-                                ->saveAsJSON();
-                });
-
-                return collect([
-                    Boolean::make(__("Available"), 'available'),
-                ])->merge($meals)->all(); 
-            }),
-
-            BelongsToMany::make(__("Service Range"), 'zones', Zone::class)
-                ->fields(function() {
-                    return [
-                        Number::make(__("Duration"), 'duration')
-                            ->rules(['required', 'min:0'])
-                            ->default(0)
-                            ->withMeta(['min' => 0])
-                            ->help(__("Minute")),
-
-                        $this->priceField(__("Cost"), 'cost'),
-
-                        Textarea::make(__('Description'), 'description')    
-                            ->rules('max:250'),
-                    ];
-                }),
-
-            MorphedByMany::make(__("Categories"), 'categories', Category::class)
-                ->fields(function($request){   
-                    return [
-                        Number::make(__("Order"), 'order')
-                    ];
-                }),
-
-            // MorphedByMany::make(__("Facilities"), 'facilities', \Armincms\Facility\Nova\Facility::class)->fields(function($request){
-
-            //     $field = data_get(
-            //         Facility::find($request->relatedResourceId), 'type', Text::class
-            //     );     
-
-            //     return [$field::make(class_basename($field), 'value')];
-            // })->withMeta(['conditionalPivotFields' => true]),
-            
-            BelongsToMany::make(__("Working Hours"), 'workingDays', WorkingDay::class)
-                ->fields(new Fields\MealTimeFields),
-        ];
-    }
+    public function isBranchRequest(Request $request)
+    {  
+        return $this->isUpdateOrCreationRequest($request) && $request->get('center') === 'false';
+    }  
 }

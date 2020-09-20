@@ -7,7 +7,7 @@ use Illuminate\Database\Migrations\Migration;
 use Armincms\Sofre\WorkingDay;
 use Armincms\Sofre\Helper;
 
-class CreateWorkingDaysTable extends Migration
+class CreateSofreWorkingDaysTable extends Migration
 {
     /**
      * Run the migrations.
