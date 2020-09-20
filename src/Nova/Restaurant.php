@@ -8,6 +8,7 @@ use Laravel\Nova\Panel;
 use Laravel\Nova\Http\Requests\NovaRequest; 
 use Laravel\Nova\Fields\{ID, Text, Textarea, Number, Boolean, Select, BelongsTo, BelongsToMany}; 
 use Inspheric\Fields\Url; 
+use NovaItemsField\Items;
 use Laraning\NovaTimeField\TimeField; 
 use OwenMelbz\RadioField\RadioButton;   
 use OptimistDigital\MultiselectField\Multiselect; 
@@ -70,6 +71,9 @@ class Restaurant extends Resource
             ID::make()
                 ->sortable(),  
 
+            Number::make(__('Hits'), 'hits')
+                ->exceptOnForms(), 
+
             RadioButton::make(__("Branch"), 'center')
                 ->options([
                     '0' => __("Independent"),
@@ -89,6 +93,11 @@ class Restaurant extends Resource
                 ->resolveUsing(function($value, $resource, $attribute) { 
                     return intval($value) ? '1' : (intval($resource->chain_id) ? 'false' : '0');
                 }),
+
+            Boolean::make(__('Online'), 'online') 
+                ->required()
+                ->rules('required')
+                ->default(true),
 
             BelongsTo::make(__('Restaurant Type'), 'type', RestaurantType::class)
                 ->withoutTrashed()
@@ -117,6 +126,22 @@ class Restaurant extends Resource
                     return $resource->name;
                 })
                 ->help(__('This name comes after the branch name')), 
+            
+            Multiselect::make(__("Sending Method"), 'sending_method')
+                ->options($sendingMethods = Helper::sendingMethod())
+                ->default(array_keys($sendingMethods))
+                ->rules('required')
+                ->saveAsJSON()
+                ->hideFromIndex(),
+
+            Multiselect::make(__("Payment Method"), 'payment_method')
+                ->options($paymentMethods = Helper::paymentMethods())
+                ->default(array_keys($paymentMethods))
+                ->rules('required')
+                ->saveAsJSON()
+                ->hideFromIndex(), 
+
+            $this->priceField(__('Minimum Order Price'), 'min_order'), 
 
             ManyToMany::make(__('Categories'), 'categories', Category::class) 
                 ->hideFromIndex(),  
@@ -139,48 +164,26 @@ class Restaurant extends Resource
                 ->fields(new Fields\Areas)
                 ->pivots()
                 ->hideFromIndex(),
-            
-            Multiselect::make(__("Sending Method"), 'sending_method')
-                ->options($sendingMethods = Helper::sendingMethod())
-                ->default(array_keys($sendingMethods))
-                ->rules('required')
-                ->saveAsJSON()
+
+           $this->imageField(__('Logo'), 'logo'),
+
+           $this->imageField(__('Featured Image'))
                 ->hideFromIndex(),
 
-            Multiselect::make(__("Payment Method"), 'payment_method')
-                ->options($paymentMethods = Helper::paymentMethods())
-                ->default(array_keys($paymentMethods))
-                ->rules('required')
-                ->saveAsJSON()
-                ->hideFromIndex(), 
-
-            Number::make(__('Hits'), 'hits')
-                ->exceptOnForms(), 
-
             new Panel(__('Media'), [
-               $this->imageField(__('Logo'), 'logo'),
-
-               $this->imageField(__('Featured Image'))
-                    ->hideFromIndex(),
             ]),
 
-            new Panel(__('Contacts'), [  
+            new Panel(__('Contact us'), [   
                 BelongsTo::make(__('Restaurant Location'), 'zone', Zone::class)
-                    ->withoutTrashed(),
+                    ->withoutTrashed()
+                    ->nullable(),
 
                 Text::make(__('Restaurant Address'), 'contacts->address'),
 
                 Url::make(__('Restaurant Website'), 'contacts->url'),
 
-                Url::make(__('Phone Number'), 'contacts->phone'),
-            ]), 
-
-            new Panel(__('Configuration'), [  
-                Boolean::make(__('Online'), 'online') 
-                    ->required()
-                    ->rules('required')
-                    ->default(false),
-            ]), 
+                Items::make(__('Phone Numbers'), 'contacts->phones'),
+            ]),  
         ]; 
     } 
 
