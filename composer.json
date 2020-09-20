@@ -14,7 +14,8 @@
         "armincms/currency": "~0.1",
         "armincms/categorizable": "~0.1",
         "armincms/taggable": "~0.1",
-        "armincms/comment": "~0.1"
+        "armincms/comment": "~0.1",
+        "dillingham/nova-items-field": "~0.1"
     },
     "autoload": {
         "psr-4": {
