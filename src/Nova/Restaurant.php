@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Laravel\Nova\Panel;    
 use Laravel\Nova\Http\Requests\NovaRequest; 
-use Laravel\Nova\Fields\{ID, Text, Textarea, Number, Boolean, Select, BelongsTo, BelongsToMany}; 
+use Laravel\Nova\Fields\{ID, Text, Number, Boolean, Select, BelongsTo, HasMany, BelongsToMany}; 
 use Inspheric\Fields\Url; 
 use NovaItemsField\Items; 
 use OwenMelbz\RadioField\RadioButton;   
@@ -64,7 +64,7 @@ class Restaurant extends Resource
     public static function relatableRestaurants(NovaRequest $request, $query)
     {
         return parent::relatableQuery($request, $query) 
-                    ->whereCenter(1)
+                    ->whereBranching('chained')
                     ->authenticate();
     }
 
@@ -83,26 +83,19 @@ class Restaurant extends Resource
             Number::make(__('Hits'), 'hits')
                 ->onlyOnDetail(), 
 
-            RadioButton::make(__("Branch"), 'center')
-                ->options([
-                    '0' => __("Independent"),
-                    'false' => __("Branch"),
-                    '1' => __("Chained"),
-                ])
-                ->default(request()->viaResourceId ? 'false' : '0')
+            RadioButton::make(__("Branch"), 'branching')
+                ->options(Helper::branching())
+                ->default(request()->viaResourceId ? 'branch' : 'independent')
                 ->hideFromIndex()
                 ->marginBetween()  
                 ->toggle([ 
-                    '0' => ['chain', 'branch'], 
-                    '1' => ['branch', 'type', 'chain', 'foods', 'areas', 'sending_method', 'payment_method', 'image', 'online'], 
-                    'false' => ['name'], 
-                ])
-                ->fillUsing(function($request, $model) { 
-                    $model->center = intval($request->center);   
-                })
-                ->resolveUsing(function($value, $resource, $attribute) { 
-                    return intval($value) ? '1' : (intval($resource->chain_id) ? 'false' : '0');
-                }),
+                    'independent' => ['chain', 'branch'], 
+                    'branch' => ['name'], 
+                    'chained' => [
+                        'branch', 'type', 'chain', 'foods', 'areas', 'image', 'online',
+                        'sending_method', 'payment_method', 
+                    ], 
+                ]),
 
             Boolean::make(__('Online'), 'online') 
                 ->sortable()
@@ -114,7 +107,7 @@ class Restaurant extends Resource
                 ->withoutTrashed()
                 ->sortable()
                 ->required() 
-                ->nullable(intval($request->get('center')) === 1),
+                ->nullable($request->get('branching') === 'chained'),
 
             BelongsTo::make(__('Chain'), 'chain', Restaurant::class)
                 ->withoutTrashed() 
@@ -187,7 +180,11 @@ class Restaurant extends Resource
             ]),  
 
             BelongsToMany::make(__('Menu'), 'foods', Food::class)
-                ->fields(new Fields\Menu), 
+                ->fields(new Fields\Menu)
+                ->hideFromDetail(optional($this->resource)->branching === 'chained'), 
+
+            HasMany::make(__('Branches'), 'branches', static::class)
+                ->hideFromDetail(optional($this->resource)->branching !== 'chained'), 
 
             new Panel(__('Contact us'), [   
                 BelongsTo::make(__('Restaurant Location'), 'zone', Zone::class)
@@ -208,11 +205,13 @@ class Restaurant extends Resource
 
     public function isUpdateOrCreationRequest(Request $request)
     {
-        return $request->isCreateOrAttachRequest() || $request->isUpdateOrUpdateAttachedRequest();
+        return  $request->isCreateOrAttachRequest() || 
+                $request->isUpdateOrUpdateAttachedRequest();
     }  
 
     public function isBranchRequest(Request $request)
     {  
-        return $this->isUpdateOrCreationRequest($request) && $request->get('center') === 'false';
+        return  $this->isUpdateOrCreationRequest($request) && 
+                $request->get('branching') === 'chained';
     }  
 }

@@ -12,6 +12,15 @@ class Helper
         return (Str::startsWith($table, $prefix) ? '' : $prefix).$table;
     }
 
+    public static function branching()
+    {
+        return [
+            'independent' => __('Independent'),
+            'branch'    => __('Branch'),
+            'chained'   => __('Chained'),
+        ]; 
+    }
+
     public static function sendingMethod()
     {
         return [

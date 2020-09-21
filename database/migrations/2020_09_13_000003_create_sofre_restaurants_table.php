@@ -16,8 +16,8 @@ class CreateSofreRestaurantsTable extends Migration
     {
         Schema::create(Helper::table('restaurants'), function (Blueprint $table) {
             $table->bigIncrements('id');    
-            $table->smallPrice('min_order'); 
-            $table->boolean('center')->default(false); 
+            $table->smallPrice('min_order');  
+            $table->enum('branching', array_keys(Helper::branching()))
             $table->unsignedBigInteger('zone_id')->nullable();
             $table->unsignedBigInteger('chain_id')->nullable();
             $table->unsignedBigInteger('restaurant_type_id')->nullable();

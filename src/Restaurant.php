@@ -111,4 +111,9 @@ class Restaurant extends Model
     {
         return OpeningHours::create($this->workingHours);
     }
+
+    public function branches()
+    {
+        return $this->hasMany(static::class, 'chain_id');
+    }
 }
