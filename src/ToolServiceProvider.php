@@ -16,10 +16,8 @@ class ToolServiceProvider extends AuthServiceProvider
      * @var array
      */
     protected $policies = [ 
-        Food::class           =>  Policies\FoodPolicy::class,
-        Branch::class         =>  Policies\BranchPolicy::class,
-        FoodGroup::class      =>  Policies\FoodGroupPolicy::class, 
-        WorkingDay::class     =>  Policies\WorkingDayPolicy::class,  
+        Food::class           =>  Policies\FoodPolicy::class, 
+        FoodGroup::class      =>  Policies\FoodGroupPolicy::class,    
         Restaurant::class     =>  Policies\RestaurantPolicy::class, 
         RestaurantType::class =>  Policies\RestaurantTypePolicy::class, 
     ];
@@ -49,14 +47,12 @@ class ToolServiceProvider extends AuthServiceProvider
 
     public function servingNova(ServingNova $event)
     {
-        LaravelNova::resources([
-            Nova\Branch::class, 
+        LaravelNova::resources([ 
             Nova\Restaurant::class,
             Nova\FoodGroup::class, 
             Nova\Food::class,
             Nova\Category::class,
-            Nova\RestaurantType::class, 
-            // Nova\WorkingDay::class, 
+            Nova\RestaurantType::class,  
             // Nova\Setting::class, 
         ]);   
     } 
