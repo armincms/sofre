@@ -43,6 +43,9 @@ class Food extends Resource
                 ->sortable()
                 ->hideFromIndex((Boolean) request('viaResourceId')),
 
+            Boolean::make(__('Private'), 'private')
+                ->default(false),
+
             BelongsTo::make(__("Food Group"), 'group', FoodGroup::class)
                 ->rules('required')
                 ->sortable()
@@ -61,58 +64,7 @@ class Food extends Resource
             ]),  
 
             $this->imageField(),
-        ];
-        // return collect([
-        //     ID::make()
-        //         ->sortable()
-        //         ->hideFromIndex((Boolean) request('viaResourceId')),
-
-        //     BelongsTo::make(__("Food Group"), 'group', FoodGroup::class)
-        //         ->rules('required')
-        //         ->sortable()
-        //         ->withoutTrashed(), 
-
-        //     new Targomaan([
-        //         Text::make(__('Name'), 'name')
-        //             ->sortable()
-        //             ->required(),
-
-        //         KeyValue::make(__('Material'), 'material')
-        //             ->hideFromIndex()
-        //             ->keyLabel(__("Material"))
-        //             ->actionText(__("Add")),
-        //     ]),   
-
-        //     // BelongsToMany::make("Restaurants", 'restaurants', Restaurant::class)
-        //     //     ->actions(function() {
-        //     //         return [
-        //     //             new Actions\Available,
-        //     //             new Actions\Unavailable,
-        //     //         ];
-        //     //     })
-        //     //     ->hideFromIndex(true),
-
-        //     $this->imageField(), 
-
-        // ])->merge($this->mealFields())->all();
-    }
-
-    public function mealFields()
-    {
-        return collect(Helper::days())->map(function($label, $day) {
-            return Text::make(__($label), function($resource) use ($day) {
-                $restaurant = $resource
-                                ->restaurants
-                                ->where('id', request('viaResourceId'))
-                                ->first(); 
-
-                $value = collect($restaurant->pivot->{$day})->map(function($meal, $key) {
-                    return __(title_case($meal)). ($key%2? '<br />' : ', ');
-                })->implode('');
-
-                return trim($value, ', ');
-            })->onlyOnIndex()->showOnIndex((boolean) request('viaResourceId'))->asHtml();
-        });
+        ]; 
     }
 
     /**
