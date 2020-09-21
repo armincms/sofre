@@ -8,10 +8,10 @@ use Laravel\Nova\Panel;
 use Laravel\Nova\Http\Requests\NovaRequest; 
 use Laravel\Nova\Fields\{ID, Text, Textarea, Number, Boolean, Select, BelongsTo, BelongsToMany}; 
 use Inspheric\Fields\Url; 
-use NovaItemsField\Items;
-use Laraning\NovaTimeField\TimeField; 
+use NovaItemsField\Items; 
 use OwenMelbz\RadioField\RadioButton;   
-use OptimistDigital\MultiselectField\Multiselect; 
+use OptimistDigital\MultiselectField\Multiselect;  
+use SadekD\NovaOpeningHoursField\NovaOpeningHoursField;
 use Armincms\Fields\{Targomaan, BelongsToMany as ManyToMany};
 use Armincms\Location\Nova\Zone;  
 use Armincms\Json\Json;
@@ -28,6 +28,15 @@ class Restaurant extends Resource
     public static $model = \Armincms\Sofre\Restaurant::class;  
 
     /**
+     * The relationships that should be eager loaded when performing an index query.
+     *
+     * @var array
+     */
+    public static $with = [
+        'chain', 'type'
+    ];
+
+    /**
      * Build a "relatable" query for the given resource.
      *
      * This query determines which instances of the model may be attached to other resources.
@@ -38,9 +47,9 @@ class Restaurant extends Resource
      */
     public static function relatableFoods(NovaRequest $request, $query)
     {
-        return parent::relatableQuery($request, $query) 
-                    ->whereIn('restaurant_id', [null, $request->resourceId])
-                    ->authenticate();
+        return parent::relatableQuery($request, $query)  
+                    ->authenticate()
+                    ->orWhere('private', false);
     }
 
     /**
@@ -72,7 +81,7 @@ class Restaurant extends Resource
                 ->sortable(),  
 
             Number::make(__('Hits'), 'hits')
-                ->exceptOnForms(), 
+                ->onlyOnDetail(), 
 
             RadioButton::make(__("Branch"), 'center')
                 ->options([
@@ -81,6 +90,7 @@ class Restaurant extends Resource
                     '1' => __("Chained"),
                 ])
                 ->default(request()->viaResourceId ? 'false' : '0')
+                ->hideFromIndex()
                 ->marginBetween()  
                 ->toggle([ 
                     '0' => ['chain', 'branch'], 
@@ -95,17 +105,20 @@ class Restaurant extends Resource
                 }),
 
             Boolean::make(__('Online'), 'online') 
+                ->sortable()
                 ->required()
                 ->rules('required')
                 ->default(true),
 
             BelongsTo::make(__('Restaurant Type'), 'type', RestaurantType::class)
                 ->withoutTrashed()
+                ->sortable()
                 ->required() 
                 ->nullable(intval($request->get('center')) === 1),
 
             BelongsTo::make(__('Chain'), 'chain', Restaurant::class)
                 ->withoutTrashed() 
+                ->sortable()
                 ->nullable(! $this->isBranchRequest($request)), 
 
             Text::make(__('Name'), 'name')
@@ -141,7 +154,8 @@ class Restaurant extends Resource
                 ->saveAsJSON()
                 ->hideFromIndex(), 
 
-            $this->priceField(__('Minimum Order Price'), 'min_order'), 
+            $this->priceField(__('Minimum Order Price'), 'min_order')
+                ->hideFromIndex(), 
 
             ManyToMany::make(__('Categories'), 'categories', Category::class) 
                 ->hideFromIndex(),  
@@ -156,33 +170,38 @@ class Restaurant extends Resource
                 })
                 ->hideFromIndex(),
 
-            BelongsToMany::make(__('Menu'), 'foods', Food::class)
-                ->fields(new Fields\Menu), 
-
 
             ManyToMany::make(__("Service Areas"), 'areas', Zone::class)
                 ->fields(new Fields\Areas)
                 ->pivots()
                 ->hideFromIndex(),
 
-           $this->imageField(__('Logo'), 'logo'),
+            $this->imageField(__('Logo'), 'logo'),
 
-           $this->imageField(__('Featured Image'))
-                ->hideFromIndex(),
+            $this->imageField(__('Featured Image'))
+                ->hideFromIndex(), 
 
-            new Panel(__('Media'), [
-            ]),
+            new Panel(__('Working Hours'), [    
+                NovaOpeningHoursField::make(__('Working Hours'), 'working_hours')
+                    ->hideFromIndex(),
+            ]),  
+
+            BelongsToMany::make(__('Menu'), 'foods', Food::class)
+                ->fields(new Fields\Menu), 
 
             new Panel(__('Contact us'), [   
                 BelongsTo::make(__('Restaurant Location'), 'zone', Zone::class)
                     ->withoutTrashed()
                     ->nullable(),
 
-                Text::make(__('Restaurant Address'), 'contacts->address'),
+                Text::make(__('Restaurant Address'), 'contacts->address')
+                    ->hideFromIndex(),
 
-                Url::make(__('Restaurant Website'), 'contacts->url'),
+                Url::make(__('Restaurant Website'), 'contacts->url')
+                    ->hideFromIndex(),
 
-                Items::make(__('Phone Numbers'), 'contacts->phones'),
+                Items::make(__('Phone Numbers'), 'contacts->phones')
+                    ->hideFromIndex(),
             ]),  
         ]; 
     } 

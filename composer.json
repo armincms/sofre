@@ -16,6 +16,8 @@
         "armincms/taggable": "~0.1",
         "armincms/comment": "~0.1",
         "dillingham/nova-items-field": "~0.1"
+        "sadekd/nova-opening-hours-field": "~1.0",
+        "spatie/opening-hours": "~2.0"
     },
     "autoload": {
         "psr-4": {

@@ -3,13 +3,14 @@ namespace Armincms\Sofre;
 
 use Illuminate\Support\Str; 
 use Illuminate\Support\Collection;   
-use Armincms\Categorizable\Categorizable;
-use Armincms\Taggable\Taggable;
-use Armincms\Location\Location;
+use Spatie\OpeningHours\OpeningHours; 
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Core\HttpSite\Concerns\{IntractsWithSite, HasPermalink}; 
-use Core\HttpSite\Component;   
+use Core\HttpSite\Component;  
+use Armincms\Categorizable\Categorizable;
+use Armincms\Taggable\Taggable;
+use Armincms\Location\Location;
 
 
 class Restaurant extends Model 
@@ -25,6 +26,7 @@ class Restaurant extends Model
      */
     protected $casts = [
         'contacts' => 'json',
+        'working_hours' => 'json',
         'sending_method' => 'json',
         'payment_method' => 'json',
     ];
@@ -103,5 +105,10 @@ class Restaurant extends Model
         return $this->belongsToMany(Location::class, 'sofre_areas')->withPivot([
             'cost', 'duration', 'note', 'id'
         ]);
+    }
+
+    public function workingHours()
+    {
+        return OpeningHours::create($this->workingHours);
     }
 }

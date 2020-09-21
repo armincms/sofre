@@ -33,6 +33,7 @@ class CreateSofreRestaurantsTable extends Migration
             
             $table->json('contacts')->nullable(); 
 
+            $table->json('working_hours')->nullable()
             $table->json('sending_method')->nullable()/*->default(json_encode([
                 'send',
                 'serve',
