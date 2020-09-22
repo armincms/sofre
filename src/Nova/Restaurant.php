@@ -214,5 +214,20 @@ class Restaurant extends Resource
     {  
         return  $this->isUpdateOrCreationRequest($request) && 
                 $request->get('branching') === 'chained';
-    }  
+    } 
+
+    /**
+     * Get the filters available for the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function filters(Request $request)
+    {
+        return [
+            new Filters\Location,
+            new Filters\Chain,
+            new Filters\Type,
+        ];
+    }
 }
