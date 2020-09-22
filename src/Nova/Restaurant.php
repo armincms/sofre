@@ -9,7 +9,7 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Fields\{ID, Text, Number, Boolean, Select, BelongsTo, HasMany, BelongsToMany}; 
 use Inspheric\Fields\Url; 
 use NovaItemsField\Items; 
-use OwenMelbz\RadioField\RadioButton;   
+use Zareismail\RadioField\RadioButton;   
 use OptimistDigital\MultiselectField\Multiselect;  
 use SadekD\NovaOpeningHoursField\NovaOpeningHoursField;
 use Armincms\Fields\{Targomaan, BelongsToMany as ManyToMany};
@@ -93,7 +93,8 @@ class Restaurant extends Resource
                     'branch' => ['name'], 
                     'chained' => [
                         'branch', 'type', 'chain', 'foods', 'areas', 'image', 'online',
-                        'sending_method', 'payment_method', 
+                        'sending_method', 'payment_method', 'working_hours', 'zone', 
+                        'contacts->address', 'contacts->url', 'contacts->phones'
                     ], 
                 ]),
 
