@@ -25,7 +25,7 @@ class Location extends Filter
      */
     public function apply(Request $request, $query, $value)
     {
-        return $query->whereZoneId(intval($value));
+        return $query->inZone($value);
     }
 
     /**

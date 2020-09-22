@@ -11,11 +11,12 @@ use Core\HttpSite\Component;
 use Armincms\Categorizable\Categorizable;
 use Armincms\Taggable\Taggable;
 use Armincms\Location\Location;
+use Armincms\Location\Concerns\Locatable;
 
 
 class Restaurant extends Model 
 {    
-    use IntractsWithFood, Branching, Categorizable, Taggable, IntractsWithSite, HasPermalink, Sluggable; 
+    use IntractsWithFood, Branching, Locatable, Categorizable, Taggable, IntractsWithSite, HasPermalink, Sluggable; 
 
     const LOCALE_KEY = 'language';
 
@@ -93,18 +94,18 @@ class Restaurant extends Model
     public function chain()
     {
         return $this->belongsTo(static::class);
-    }
-
-    public function zone()
-    {
-        return $this->belongsTo(Location::class);
-    }
-
+    } 
+    
     public function areas()
     {
         return $this->belongsToMany(Location::class, 'sofre_areas')->withPivot([
             'cost', 'duration', 'note', 'id'
         ]);
+    }
+
+    public function locations()
+    {
+        return $this->areas();
     }
 
     public function workingHours()
