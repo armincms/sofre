@@ -213,7 +213,7 @@ class Restaurant extends Resource
     public function isBranchRequest(Request $request)
     {  
         return  $this->isUpdateOrCreationRequest($request) && 
-                $request->get('branching') === 'chained';
+                $request->get('branching') === 'branch';
     } 
 
     /**
