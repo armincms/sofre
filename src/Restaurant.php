@@ -15,7 +15,7 @@ use Armincms\Location\Location;
 
 class Restaurant extends Model 
 {    
-    use IntractsWithFood, Categorizable, Taggable, IntractsWithSite, HasPermalink, Sluggable; 
+    use IntractsWithFood, Branching, Categorizable, Taggable, IntractsWithSite, HasPermalink, Sluggable; 
 
     const LOCALE_KEY = 'language';
 
@@ -56,7 +56,7 @@ class Restaurant extends Model
      *  
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function type($value='')
+    public function type()
     {
         return $this->belongsTo(RestaurantType::class, 'restaurant_type_id');
     }
@@ -110,10 +110,5 @@ class Restaurant extends Model
     public function workingHours()
     {
         return OpeningHours::create($this->workingHours);
-    }
-
-    public function branches()
-    {
-        return $this->hasMany(static::class, 'chain_id');
     }
 }
