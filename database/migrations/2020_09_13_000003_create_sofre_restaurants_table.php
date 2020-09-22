@@ -33,20 +33,10 @@ class CreateSofreRestaurantsTable extends Migration
             
             $table->json('contacts')->nullable(); 
 
-            $table->json('working_hours')->nullable()
-            $table->json('sending_method')->nullable()/*->default(json_encode([
-                'send',
-                'serve',
-                'delivery',
-                'courier',
-            ]))*/;  
+            $table->json('working_hours')->nullable();
+            $table->json('sending_method')->nullable();  
 
-            $table->json('payment_method')->nullable()/*->default(json_encode([
-                'pos',
-                'online',
-                'cash',
-                'credit',
-            ]))*/;  
+            $table->json('payment_method')->nullable();  
  
             $table->string('name')->nullable();  
             $table->string('locale')->default(app()->getLocale());  
