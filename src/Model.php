@@ -8,8 +8,9 @@ use Armincms\Targomaan\Contracts\Translatable;
 use Armincms\Concerns\IntractsWithMedia; 
 use Armincms\Contracts\Authorizable;
 use Armincms\Concerns\Authorization; 
+use Zareismail\NovaPolicy\Contracts\Ownable; 
 
-class Model extends LaravelModel implements Authorizable, Translatable, HasMedia
+class Model extends LaravelModel implements Authorizable, Translatable, HasMedia, Ownable
 {   
     use Authorization, InteractsWithTargomaan, SoftDeletes, IntractsWithMedia; 
 
@@ -38,4 +39,14 @@ class Model extends LaravelModel implements Authorizable, Translatable, HasMedia
     {
         return Helper::table(parent::getTable());
     }  
+
+    /**
+     * Indicate Model Authenticatable.
+     * 
+     * @return mixed
+     */
+    public function owner()
+    {
+        return $this->user();
+    }
 }
