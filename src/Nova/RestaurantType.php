@@ -32,7 +32,10 @@ class RestaurantType extends Resource
                     ->rules('required')
             ]),
 
-            $this->imageField(),
+            $this->imageField()
+                    ->conversionOnPreview('common-thumbnail') 
+                    ->conversionOnDetailView('common-thumbnail') 
+                    ->conversionOnIndexView('common-thumbnail'),
         ];
     } 
 }

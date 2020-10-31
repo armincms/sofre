@@ -8,8 +8,8 @@ class RestaurantType extends Model
     protected $medias = [
         'image' => [ 
             'disk'  => 'armin.image',
-            'schemas' => [
-                'logo', 'icon', 'thumbnail'
+            'conversions' => [
+                'restaurant-type', 'common'
             ]
         ], 
     ]; 

@@ -7,8 +7,8 @@ class Food extends Model
     protected $medias = [
         'image' => [ 
             'disk'  => 'armin.image',
-            'schemas' => [
-                'food', 'food.list', '*'
+            'conversions' => [
+                'food'
             ]
         ], 
     ]; 

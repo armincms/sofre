@@ -63,7 +63,10 @@ class Food extends Resource
                     ->actionText(__("Add Material")),
             ]),  
 
-            $this->imageField(),
+            $this->imageField()
+                    ->conversionOnPreview('food-thumbnail') 
+                    ->conversionOnDetailView('food-thumbnail') 
+                    ->conversionOnIndexView('food-thumbnail'),
         ]; 
     }
 

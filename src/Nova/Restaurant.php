@@ -170,9 +170,15 @@ class Restaurant extends Resource
                 ->pivots()
                 ->hideFromIndex(),
 
-            $this->imageField(__('Logo'), 'logo'),
+            $this->imageField(__('Logo'), 'logo')
+                    ->conversionOnPreview('common-thumbnail') 
+                    ->conversionOnDetailView('common-thumbnail') 
+                    ->conversionOnIndexView('common-thumbnail'),
 
             $this->imageField(__('Featured Image'))
+                ->conversionOnPreview('common-thumbnail') 
+                ->conversionOnDetailView('common-thumbnail') 
+                ->conversionOnIndexView('common-thumbnail')
                 ->hideFromIndex(), 
 
             new Panel(__('Working Hours'), [    

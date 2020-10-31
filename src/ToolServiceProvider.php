@@ -35,6 +35,19 @@ class ToolServiceProvider extends AuthServiceProvider
         $this->configureWebComponents();
         $this->registerPolicies();
         LaravelNova::serving([$this, 'servingNova']); 
+
+
+        $this->app->resolving('conversion', function($conversion) { 
+            $conversion->extend('restaurant', function() {
+                return new Conversions\Restaurant;
+            });
+            $conversion->extend('restaurant-type', function() {
+                return new Conversions\RestaurantType;
+            });
+            $conversion->extend('food', function() {
+                return new Conversions\Food;
+            });
+        });
     } 
 
     public function configureWebComponents()

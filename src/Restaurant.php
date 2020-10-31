@@ -3,8 +3,7 @@ namespace Armincms\Sofre;
 
 use Illuminate\Support\Str; 
 use Illuminate\Support\Collection;   
-use Spatie\OpeningHours\OpeningHours; 
-use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\OpeningHours\OpeningHours;  
 use Cviebrock\EloquentSluggable\Sluggable;
 use Core\HttpSite\Concerns\{IntractsWithSite, HasPermalink}; 
 use Core\HttpSite\Component;  
@@ -35,15 +34,15 @@ class Restaurant extends Model
     protected $medias = [
         'image' => [ 
             'disk'  => 'armin.image',
-            'schemas' => [
-                'food', 'food.list', '*'
+            'conversions' => [
+                'restaurant', 'common'
             ]
         ], 
 
         'logo' => [ 
             'disk'  => 'armin.image',
-            'schemas' => [
-                'icon', 'logo', 'thumbnail'
+            'conversions' => [
+                'restaurant', 'common'
             ]
         ], 
 
