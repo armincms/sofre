@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Laravel\Nova\Panel;    
 use Laravel\Nova\Http\Requests\NovaRequest; 
-use Laravel\Nova\Fields\{ID, Text, Number, Boolean, Select, BelongsTo, HasMany, BelongsToMany}; 
+use Laravel\Nova\Fields\{ID, Text, Number, Boolean, Select, BelongsTo, HasMany, MorphMany, BelongsToMany}; 
 use Inspheric\Fields\Url; 
 use NovaItemsField\Items; 
 use Zareismail\RadioField\RadioButton;   
@@ -186,9 +186,9 @@ class Restaurant extends Resource
                     ->hideFromIndex(),
             ]),  
 
-            BelongsToMany::make(__('Menu'), 'foods', Food::class)
-                ->fields(new Fields\Menu)
-                ->hideFromDetail(optional($this->resource)->branching === 'chained'), 
+            // BelongsToMany::make(__('Menu'), 'foods', Food::class)
+            //     ->fields(new Fields\Menu)
+            //     ->hideFromDetail(optional($this->resource)->branching === 'chained'), 
 
             HasMany::make(__('Branches'), 'branches', static::class)
                 ->hideFromDetail(optional($this->resource)->branching !== 'chained'), 
@@ -207,6 +207,8 @@ class Restaurant extends Resource
                 Items::make(__('Phone Numbers'), 'contacts->phones')
                     ->hideFromIndex(),
             ]),  
+
+            MorphMany::make(__('Comments'), 'comments', Comment::class), 
         ]; 
     } 
 

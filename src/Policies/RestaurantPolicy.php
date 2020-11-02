@@ -3,6 +3,7 @@
 namespace Armincms\Sofre\Policies;
   
 use Illuminate\Contracts\Auth\Authenticatable as User;
+use Laravelista\Comments\Comment;
 use Armincms\Sofre\Restaurant;
 use Armincms\Sofre\Food;
 
@@ -16,6 +17,18 @@ class RestaurantPolicy extends Policy
      * @return mixed
      */
     public function addRestaurant(User $user, Restaurant $restaurant)
+    {
+        return $this->authorized();
+    } 
+
+    /**
+     * Determine whether the user can attach Comment to the restaurant.
+     *
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param  \Laravelista\Comments\Comment  $comment
+     * @return mixed
+     */
+    public function addComment(User $user, Comment $comment)
     {
         return $this->authorized();
     } 

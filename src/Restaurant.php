@@ -2,7 +2,8 @@
 namespace Armincms\Sofre;  
 
 use Illuminate\Support\Str; 
-use Illuminate\Support\Collection;   
+use Illuminate\Support\Collection;  
+use Laravelista\Comments\Commentable; 
 use Spatie\OpeningHours\OpeningHours;  
 use Cviebrock\EloquentSluggable\Sluggable;
 use Core\HttpSite\Concerns\{IntractsWithSite, HasPermalink}; 
@@ -15,7 +16,8 @@ use Armincms\Location\Concerns\Locatable;
 
 class Restaurant extends Model 
 {    
-    use IntractsWithFood, Branching, Locatable, Categorizable, Taggable, IntractsWithSite, HasPermalink, Sluggable; 
+    use IntractsWithFood, Branching, Locatable, Categorizable, Taggable;
+    use IntractsWithSite, HasPermalink, Sluggable, Commentable; 
 
     const LOCALE_KEY = 'language';
 
