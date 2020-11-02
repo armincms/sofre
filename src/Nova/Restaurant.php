@@ -13,10 +13,10 @@ use Zareismail\RadioField\RadioButton;
 use OptimistDigital\MultiselectField\Multiselect;  
 use SadekD\NovaOpeningHoursField\NovaOpeningHoursField;
 use Armincms\Fields\{Targomaan, BelongsToMany as ManyToMany};
+use Armincms\NovaComment\Nova\Comment;
 use Armincms\Location\Nova\Zone;  
 use Armincms\Json\Json;
 use Armincms\Sofre\Helper;
-
 
 class Restaurant extends Resource  
 { 
