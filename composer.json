@@ -10,6 +10,7 @@
         "php": ">=7.1.0",  
         "armincms/armincms": "~0.3", 
         "armincms/nova-targomaan": "~0.1",
+        "armincms/nova-comment": "~0.1",
         "armincms/location": "~0.3",
         "armincms/currency": "~0.1",
         "armincms/categorizable": "~0.1",
