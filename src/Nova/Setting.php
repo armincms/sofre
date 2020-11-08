@@ -53,4 +53,12 @@ class Setting extends ConfigResource
                 ->withMeta(["value" => true])
         ];
     } 
+
+    public static function currency()
+    {
+        $currencies = collect(currency()->getActiveCurrencies());
+        $currency = static::option('_sfore_currency_', 'IRR');
+
+        return $currencies->has($currency) ? $currencies->get($currency) : $currencies->first();
+    }
 }
