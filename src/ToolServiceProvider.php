@@ -17,6 +17,7 @@ class ToolServiceProvider extends AuthServiceProvider
      */
     protected $policies = [ 
         Food::class           =>  Policies\FoodPolicy::class, 
+        Discount::class       =>  Policies\RestaurantDiscount::class, 
         FoodGroup::class      =>  Policies\FoodGroupPolicy::class,    
         Restaurant::class     =>  Policies\RestaurantPolicy::class, 
         RestaurantType::class =>  Policies\RestaurantTypePolicy::class, 
@@ -66,8 +67,9 @@ class ToolServiceProvider extends AuthServiceProvider
             Nova\FoodGroup::class, 
             Nova\Food::class,
             Nova\Category::class,
+            Nova\Discount::class,
             Nova\RestaurantType::class,  
-            // Nova\Setting::class, 
+            Nova\Setting::class, 
         ]);   
     } 
 }

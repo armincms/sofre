@@ -113,4 +113,9 @@ class Restaurant extends Model
     {
         return OpeningHours::create($this->workingHours);
     }
+
+    public function discounts()
+    {
+        return $this->hasMany(Discount::class);
+    }
 }
