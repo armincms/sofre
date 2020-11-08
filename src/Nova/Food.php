@@ -4,12 +4,9 @@ namespace Armincms\Sofre\Nova;
  
 use Illuminate\Http\Request;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Laravel\Nova\Fields\BelongsTo;  
-use Laravel\Nova\Fields\KeyValue; 
-use Laravel\Nova\Fields\Boolean; 
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\ID;
-use Armincms\Fields\{Targomaan, BelongsToMany};
+use Laravel\Nova\Fields\{ID, Text, Boolean, KeyValue, BelongsTo, MorphMany};  
+use Armincms\NovaComment\Nova\Comment;
+use Armincms\Fields\Targomaan;
 use Armincms\Sofre\Helper;
 
 class Food extends Resource
@@ -67,6 +64,8 @@ class Food extends Resource
                     ->conversionOnPreview('food-thumbnail') 
                     ->conversionOnDetailView('food-thumbnail') 
                     ->conversionOnIndexView('food-thumbnail'),
+
+            MorphMany::make(__('Comments'), 'comments', Comment::class), 
         ]; 
     }
 
