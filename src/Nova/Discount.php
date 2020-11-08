@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Fields\{ID, Text, Select, Date, BooleanGroup, BelongsTo};   
 use OwenMelbz\RadioField\RadioButton;
+use Dpsoft\NovaPersianDate\PersianDateTime;
 use Armincms\Fields\{InputSelect, Chain};
 
 class Discount extends Resource
@@ -71,13 +72,13 @@ class Discount extends Resource
 
             Text::make(__('Note'), 'note'),
 
-            Date::make(__('Starts At'), 'starts_at')
+            PersianDateTime::make(__('Starts At'), 'starts_at')
                 ->required()
                 ->rules('required'),
 
-            Date::make(__('Expires On'), 'expires_on')
+            PersianDateTime::make(__('Expires On'), 'expires_on')
                 ->required()
-                ->rules('required'),
+                ->rules('required'), 
 
             Chain::as('menu', function() {
                 return  [
