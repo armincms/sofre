@@ -20,8 +20,8 @@ class CreateSofreDiscountsTable extends Migration
             $table->json('discount'); 
             $table->json('items')->nullable();
             $table->unsignedBigInteger('restaurant_id');  
-            $table->timestamp('starts_at');
-            $table->timestamp('expires_on');
+            $table->timestamp('starts_at')->nullable();
+            $table->timestamp('expires_on')->nullable();
             $table->softDeletes();
             $table->timestamps();
             $table->auth();
