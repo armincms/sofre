@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean; 
 use Laravel\Nova\Fields\Select;
 use Armincms\Nova\ConfigResource;  
+use Armincms\Fields\OpeningHours;
+use Armincms\Sofre\Helper;
 
 class Setting extends ConfigResource
 {      
@@ -50,7 +52,13 @@ class Setting extends ConfigResource
                 }), 
 
             Boolean::make(__("Online Reservation"), "_sfore_online_reserve_") 
-                ->withMeta(["value" => true])
+                ->withMeta(["value" => true]),
+
+            OpeningHours::make(__('Opening Hours'), '_sfore_opening_hours_')
+                ->restrictTo(Helper::meals())
+                ->withMeta([
+                    'value' => static::openingHours(),
+                ]),
         ];
     } 
 
@@ -60,5 +68,12 @@ class Setting extends ConfigResource
         $currency = static::option('_sfore_currency_', 'IRR');
 
         return $currencies->has($currency) ? $currencies->get($currency) : $currencies->first();
+    }
+
+    public static function openingHours()
+    {
+        return static::option(
+            '_sfore_opening_hours_', Helper::fillWeekMeals()->map->values()->toArray()
+        );
     }
 }

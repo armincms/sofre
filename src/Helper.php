@@ -64,53 +64,44 @@ class Helper
     }
 
 
-    public static function defaultMealDuration(string $meal) { 
+    public static function guessMealTime($meal)
+    {
         switch ($meal) {
             case 'breakfast':
-                return [
-                    'from'  => '05:00',
-                    'until' => '08:00',
-                ];
+                return '06:00-10:00';
                 break;
+
             case 'lunch':
-                return [
-                    'from'  => '11:00',
-                    'until' => '15:00',
-                ];
+                return '11:30-14:30';
                 break;
+
             case 'evening':
-                return [
-                    'from'  => '15:00',
-                    'until' => '19:00',
-                ];
+                return '16:00-18:00';
                 break;
+
             case 'dinner':
-                return [
-                    'from'  => '19:00',
-                    'until' => '24:00',
-                ];
+                return '19:00-23:00';
                 break;
             
             default:
-                return [
-                    'from'  => '05:00',
-                    'until' => '24:00',
-                ];
+                return '00:08-23:00';
                 break;
-        } 
-    }  
+        }
+    }
 
-    public static function fillWeekMeals(callable $callback)
+    public static function fillWeekMeals(callable $callback = null)
     {
         return collect(Helper::days())->map(function($day, $name) use ($callback) {  
-            return static::fillMeals($callback, $name);
+            return static::fillMeals($name, $callback = null);
         });
     }
 
-    public static function fillMeals(callable $callback, $day)
+    public static function fillMeals($day, callable $callback = null)
     {
-        return collect(Helper::meals())->map(function($meal, $name) use ($callback, $day) { 
-            return $callback($name, $day) ?: static::defaultMealDuration($name); 
+        return collect(Helper::meals())->map(function($meal, $data) use ($callback, $day) { 
+            $hours = is_callable($callback) ? $callback($data, $day) : static::guessMealTime($data); 
+
+            return compact('hours', 'data');
         }); 
     }
 }

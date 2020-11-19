@@ -11,6 +11,7 @@
         "armincms/armincms": "~0.3", 
         "armincms/nova-targomaan": "~0.1",
         "armincms/nova-comment": "~0.1",
+        "armincms/nova-opening-hours": "~0.1", 
         "armincms/input-select": "~0.1",
         "armincms/chain": "~0.3",
         "armincms/location": "~0.3",
@@ -18,8 +19,7 @@
         "armincms/categorizable": "~0.1",
         "armincms/taggable": "~0.1", 
         "dillingham/nova-items-field": "~0.1",
-        "zareismail/nova-radio-field": "~0.1",
-        "sadekd/nova-opening-hours-field": "~1.0",
+        "zareismail/nova-radio-field": "~0.1", 
         "dpsoft/nova-persian-date": "^1.1",
         "spatie/opening-hours": "~2.0"
     },

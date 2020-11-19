@@ -10,9 +10,8 @@ use Laravel\Nova\Fields\{ID, Text, Number, Boolean, Select, BelongsTo, HasMany, 
 use Inspheric\Fields\Url; 
 use NovaItemsField\Items; 
 use Zareismail\RadioField\RadioButton;   
-use OptimistDigital\MultiselectField\Multiselect;  
-use SadekD\NovaOpeningHoursField\NovaOpeningHoursField;
-use Armincms\Fields\{Targomaan, BelongsToMany as ManyToMany};
+use OptimistDigital\MultiselectField\Multiselect;   
+use Armincms\Fields\{Targomaan, OpeningHours, BelongsToMany as ManyToMany};
 use Armincms\NovaComment\Nova\Comment;
 use Armincms\Location\Nova\Zone;  
 use Armincms\Json\Json;
@@ -164,11 +163,17 @@ class Restaurant extends Resource
                 })
                 ->hideFromIndex(),
 
-
             ManyToMany::make(__("Service Areas"), 'areas', Zone::class)
                 ->fields(new Fields\Areas)
                 ->pivots()
                 ->hideFromIndex(),
+
+            OpeningHours::make(__('Opening Hours'), 'working_hours')
+                ->restrictTo(Helper::meals())
+                ->withMeta([
+                    'value' => $this->working_hours ?? Setting::openingHours()
+                ])
+                ->hideFromIndex(), 
 
             $this->imageField(__('Logo'), 'logo')
                     ->conversionOnPreview('common-thumbnail') 
@@ -179,12 +184,7 @@ class Restaurant extends Resource
                 ->conversionOnPreview('common-thumbnail') 
                 ->conversionOnDetailView('common-thumbnail') 
                 ->conversionOnIndexView('common-thumbnail')
-                ->hideFromIndex(), 
-
-            new Panel(__('Working Hours'), [    
-                NovaOpeningHoursField::make(__('Working Hours'), 'working_hours')
-                    ->hideFromIndex(),
-            ]),  
+                ->hideFromIndex(),  
 
             // BelongsToMany::make(__('Menu'), 'foods', Food::class)
             //     ->fields(new Fields\Menu)
