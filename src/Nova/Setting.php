@@ -41,7 +41,7 @@ class Setting extends ConfigResource
     public function fields(Request $request)
     {   
         return [  
-            Select::make(__("Currency"), '_sfore_currency_')
+            Select::make(__("Currency"), '_sofre_currency_')
                 ->options(collect(currency()->getActiveCurrencies())->map->symbol->all())
                 ->default("IRR")
                 ->required()
@@ -51,10 +51,10 @@ class Setting extends ConfigResource
                     return currency()->getCurrency($value)['symbol'];
                 }), 
 
-            Boolean::make(__("Online Reservation"), "_sfore_online_reserve_") 
+            Boolean::make(__("Online Reservation"), "_sofre_online_reserve_") 
                 ->withMeta(["value" => true]),
 
-            OpeningHours::make(__('Opening Hours'), '_sfore_opening_hours_')
+            OpeningHours::make(__('Opening Hours'), '_sofre_opening_hours_')
                 ->restrictTo(Helper::meals())
                 ->withMeta([
                     'value' => static::openingHours(),
@@ -65,7 +65,7 @@ class Setting extends ConfigResource
     public static function currency()
     {
         $currencies = collect(currency()->getActiveCurrencies());
-        $currency = static::option('_sfore_currency_', 'IRR');
+        $currency = static::option('_sofre_currency_', 'IRR');
 
         return $currencies->has($currency) ? $currencies->get($currency) : $currencies->first();
     }
@@ -73,7 +73,7 @@ class Setting extends ConfigResource
     public static function openingHours()
     {
         return static::option(
-            '_sfore_opening_hours_', Helper::fillWeekMeals()->map->values()->toArray()
+            '_sofre_opening_hours_', Helper::fillWeekMeals()->map->values()->toArray()
         );
     }
 }
