@@ -64,9 +64,15 @@ class Setting extends ConfigResource
 
     public static function currency()
     { 
-        $currency = static::option('_sofre_currency_', 'IRR'); 
+        $currency = static::currencyCode(); 
 
-        return currency()->hasCurrency($currency) ? currency()->getCurrency() : currency()->getActiveCurrencies()->first();
+        $currency = currency()->getCurrency(currency()->hasCurrency($currency)  ? $currency : null);
+
+        preg_match('/\.([0-9]+)/', $currency['format'] ?? null, $matches);
+
+        return array_merge((array) $currency, [
+            'decimal' => strlen($matches[1] ?? null),
+        ]);
     }
 
     public static function currencyCode()
