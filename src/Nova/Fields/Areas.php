@@ -4,6 +4,7 @@ namespace Armincms\Sofre\Nova\Fields;
  
 use Laravel\Nova\Fields\{Text, Number};  
 use Armincms\Nova\Fields\Money; 
+use Armincms\Sofre\Nova\Setting;; 
 
 class Areas
 { 
@@ -17,9 +18,9 @@ class Areas
                 ->withMeta(['min' => 0])
                 ->help(__("Minute")),
  
-            Money::make(__("Cost"), 'IRR', 'cost')
-                ->default(0.00) 
-                ->storedInMinorUnits(),
+            Money::make(__("Cost"), 'cost')
+                ->currency(Setting::currencyCode())
+                ->default(0.00),
 
             Text::make(__('Note'), 'note')    
                 ->rules('max:250'),

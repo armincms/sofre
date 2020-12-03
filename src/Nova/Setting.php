@@ -63,11 +63,15 @@ class Setting extends ConfigResource
     } 
 
     public static function currency()
-    {
-        $currencies = collect(currency()->getActiveCurrencies());
-        $currency = static::option('_sofre_currency_', 'IRR');
+    { 
+        $currency = static::option('_sofre_currency_', 'IRR'); 
 
-        return $currencies->has($currency) ? $currencies->get($currency) : $currencies->first();
+        return currency()->hasCurrency($currency) ? currency()->getCurrency() : currency()->getActiveCurrencies()->first();
+    }
+
+    public static function currencyCode()
+    { 
+        return static::option('_sofre_currency_', 'IRR');  
     }
 
     public static function openingHours()

@@ -34,8 +34,8 @@ class Menu
 
     public function priceField()
     {
-        return Money::make(__('Price'), Setting::option('_sfore_currency_', 'IRR'), 'price')
+        return Money::make(__('Price'), 'price')
                     ->default(0.00)
-                    ->storedInMinorUnits(); 
+                    ->currency(Setting::currencyCode()); 
     }
 }

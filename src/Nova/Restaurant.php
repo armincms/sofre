@@ -32,7 +32,7 @@ class Restaurant extends Resource
      * @var array
      */
     public static $with = [
-        'chain', 'type'
+        'chain', 'type', 'type', 'media'
     ];
 
     /**
@@ -147,7 +147,7 @@ class Restaurant extends Resource
                 ->saveAsJSON()
                 ->hideFromIndex(), 
 
-            $this->priceField(__('Minimum Order Price'), 'min_order')
+            $this->priceField(__('Minimum Order Price'), 'min_order', Setting::currencyCode())
                 ->hideFromIndex(), 
 
             ManyToMany::make(__('Categories'), 'categories', Category::class) 
