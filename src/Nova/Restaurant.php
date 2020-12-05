@@ -151,29 +151,7 @@ class Restaurant extends Resource
                 ->hideFromIndex(), 
 
             $this->priceField(__('Packaging Cost'), 'packaging_cost', Setting::currencyCode())
-                ->hideFromIndex(), 
-
-            Chain::as('tax_percent', function($request) {
-                return [
-                    Boolean::make(__('Active TAX'), 'tax_status', function() {
-                        return intval($this->tax) > 0;
-                    })->fillUsing(function() {}),
-                ];
-            }),
-
-            Chain::with('tax_percent', function($request) {
-                if(intval($request->get('tax_status'))) {
-                    return [
-                        Number::make(__('TAX Percent'), 'tax')
-                            ->min(0.1)
-                            ->step(0.1),
-                    ]; 
-                }
-            }),
-
-            Number::make(__('TAX Percent'), function() {
-                return $this->tax ?: null;
-            }),
+                ->hideFromIndex(),  
 
             ManyToMany::make(__('Categories'), 'categories', Category::class) 
                 ->hideFromIndex(),  

@@ -15,8 +15,7 @@ class ChangeSofreRestaurantsTable extends Migration
     public function up()
     {
         Schema::table(Helper::table('restaurants'), function (Blueprint $table) {
-            $table->price('packaging_cost');    
-            $table->tinyInteger('tax')->default(0);     
+            $table->price('packaging_cost');       
         });
     }
 
@@ -28,7 +27,7 @@ class ChangeSofreRestaurantsTable extends Migration
     public function down()
     {
         Schema::table(Helper::table('restaurants'), function (Blueprint $table) {
-            $table->dropColumn(['packaging_cost', 'tax']);     
+            $table->dropColumn(['packaging_cost']);     
         });
     }
 }

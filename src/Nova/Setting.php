@@ -3,8 +3,7 @@
 namespace Armincms\Sofre\Nova;
   
 use Illuminate\Http\Request;  
-use Laravel\Nova\Fields\Boolean; 
-use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\{Number, Boolean, Select};  
 use Armincms\Nova\ConfigResource;  
 use Armincms\Fields\OpeningHours;
 use Armincms\Sofre\Helper;
@@ -51,8 +50,17 @@ class Setting extends ConfigResource
                     return currency()->getCurrency($value)['symbol'];
                 }), 
 
+            Number::make(__('TAX'), '_sofre_tax_')
+                ->nullable(),
+
             Boolean::make(__("Online Reservation"), "_sofre_online_reserve_") 
                 ->withMeta(["value" => true]),
+
+            OpeningHours::make(__('Opening Hours'), '_sofre_opening_hours_')
+                ->restrictTo(Helper::meals())
+                ->withMeta([
+                    'value' => static::openingHours(),
+                ]),
 
             OpeningHours::make(__('Opening Hours'), '_sofre_opening_hours_')
                 ->restrictTo(Helper::meals())
