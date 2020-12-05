@@ -60,13 +60,7 @@ class Setting extends ConfigResource
                 ->restrictTo(Helper::meals())
                 ->withMeta([
                     'value' => static::openingHours(),
-                ]),
-
-            OpeningHours::make(__('Opening Hours'), '_sofre_opening_hours_')
-                ->restrictTo(Helper::meals())
-                ->withMeta([
-                    'value' => static::openingHours(),
-                ]),
+                ]), 
         ];
     } 
 
