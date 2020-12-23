@@ -52,7 +52,7 @@ class Model extends LaravelModel implements Authorizable, Translatable, HasMedia
     }
 
     /**
-     * Get feature image for the given converions
+     * Get feature images for the given converions
      * 
      * @param  array $conversions 
      * @param  string $name        
@@ -61,5 +61,17 @@ class Model extends LaravelModel implements Authorizable, Translatable, HasMedia
     public function featuredImages($conversions, $name = 'image')
     {
         return $this->getConversions($this->getFirstMedia($name), (array) $conversions);
+    }
+
+    /**
+     * Get feature image for the given converion
+     * 
+     * @param  array $conversions 
+     * @param  string $name        
+     * @return array              
+     */
+    public function featuredImage(string $conversion, $name = 'image')
+    {
+        return $this->featuredImages((array) $conversion, $name)->get($conversion);
     }
 }
