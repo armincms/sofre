@@ -4,7 +4,7 @@ namespace Armincms\Sofre\Nova\Filters;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Filters\Filter;
-use Armincms\Sofre\RestaurantType;
+use Armincms\Sofre\Models\RestaurantType;
 
 class Type extends Filter
 {

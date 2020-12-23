@@ -7,7 +7,7 @@ use Core\HttpSite\Contracts\Resourceable;
 use Core\HttpSite\Concerns\IntractsWithResource;
 use Core\HttpSite\Concerns\IntractsWithLayout;
 use Core\Document\Document;
-use Armincms\Sofre\Restaurant as Model;
+use Armincms\Sofre\Models\Restaurant as RestaurantModel;
 
 class Restaurant extends Component implements Resourceable
 {       
@@ -20,54 +20,22 @@ class Restaurant extends Component implements Resourceable
 	 */
 	protected $wheres = [ 
 		'id'	=> '[0-9]+'
-	];  
-
-	private $type = null;
+	];   
 
 	public function toHtml(Request $request, Document $docuemnt) : string
 	{       
-		$blog = Model::whereHas('translates', function($q) use ($request) {   
-			$q
-				->where('url', 'LIKE', "%{$request->relativeUrl()}")
-				->where($q->qualifyColumn('language'), app()->getLocale());
-		})->whereType($this->type)->firstOrFail();
+		$restaurant = RestaurantModel::where([
+			'url' 	=> $request->relativeUrl(),
+			'locale'=>  app()->getLocale(),
+		])->firstOrFail(); 
 
-		if(! $blog->isVisible()) {
-			abort(404, "404 Not Found Error ...!");
-		}
+		$this->resource($restaurant);  
 
-		$this->resource($blog);  
-
-		$docuemnt->title($blog->metaTitle()?: $blog->title); 
+		$docuemnt->title($restaurant->metaTitle()?: $restaurant->name); 
 		
-		$docuemnt->description($blog->metaDescription()?: $blog->intro_text);   
+		$docuemnt->description($restaurant->metaDescription()?: $restaurant->name);   
 
 		return $this->firstLayout($docuemnt, $this->config('layout'), 'citadel')
-					->display($blog->toArray(), $docuemnt->component->config('layout', [])); 
-	}   
-
-	public function setComponentName(string $name)
-	{
-		$this->name = $name;
-		$this->type = $name;
-		$this->label = 'blog::title.'. str_plural($name);
-		$this->singularLabel = "blog::title.{$name}"; 
-
-		return $this;
-	}
-
-	public function image(string $schema)
-	{  
-		return optional($this->resource->image)->get($schema) ?? schema_placeholder($schema);
-	}
-
-	public function categories()
-	{
-		return $this->resource->categories;
-	}
-
-	public function author()
-	{
-		return $this->resource->owner;
-	}
+					->display($restaurant->toArray(), $docuemnt->component->config('layout', [])); 
+	}    
 }

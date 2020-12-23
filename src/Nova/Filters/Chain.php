@@ -4,7 +4,7 @@ namespace Armincms\Sofre\Nova\Filters;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Filters\Filter;
-use Armincms\Sofre\Restaurant;
+use Armincms\Sofre\Models\Restaurant;
 
 class Chain extends Filter
 {
