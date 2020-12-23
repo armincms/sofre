@@ -3,7 +3,7 @@
 namespace Armincms\Sofre; 
 
 
-trait IntractsWithFood
+trait InteractsWithFood
 {   
     public function foods()
     {

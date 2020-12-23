@@ -56,6 +56,7 @@ class ToolServiceProvider extends AuthServiceProvider
         \Site::push('sofre', function($blog) {
             $blog->directory('sofre');
  
+            $blog->pushComponent(new Components\SearchRestaurant);
             $blog->pushComponent(new Components\Restaurant);
         });
     }

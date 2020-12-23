@@ -49,4 +49,16 @@ class Model extends LaravelModel implements Authorizable, Translatable, HasMedia
     {
         return $this->user();
     }
+
+    /**
+     * Get feature image for the given converions
+     * 
+     * @param  array $conversions 
+     * @param  string $name        
+     * @return array              
+     */
+    public function featuredImages($conversions, $name = 'image')
+    {
+        return $this->getConversions($this->getFirstMedia($name), (array) $conversions);
+    }
 }

@@ -1,23 +1,17 @@
 <?php
 namespace Armincms\Sofre;  
-
-use Illuminate\Support\Str; 
-use Illuminate\Support\Collection;  
-use Laravelista\Comments\Commentable; 
-use Spatie\OpeningHours\OpeningHours;  
+   
+use Laravelista\Comments\Commentable;  
 use Cviebrock\EloquentSluggable\Sluggable;
 use Core\HttpSite\Concerns\{IntractsWithSite, HasPermalink}; 
 use Core\HttpSite\Component;  
 use Armincms\Categorizable\Categorizable;
 use Armincms\Taggable\Taggable;
-use Armincms\Location\Location;
-use Armincms\Location\Concerns\Locatable;
-
 
 class Restaurant extends Model 
 {    
-    use IntractsWithFood, Branching, Locatable, Categorizable, Taggable;
-    use IntractsWithSite, HasPermalink, Sluggable, Commentable; 
+    use InteractsWithFood, InteractsWithDiscount, InteractsWithAreas, Branching, HasOpeningHours;
+    use IntractsWithSite, HasPermalink, Sluggable, Commentable, Categorizable, Taggable; 
 
     const LOCALE_KEY = 'language';
 
@@ -92,30 +86,8 @@ class Restaurant extends Model
         ]; 
     }
 
-    public function chain()
+    public function getUrl()
     {
-        return $this->belongsTo(static::class);
-    } 
-    
-    public function areas()
-    {
-        return $this->belongsToMany(Location::class, 'sofre_areas')->withPivot([
-            'cost', 'duration', 'note', 'id'
-        ]);
-    }
-
-    public function locations()
-    {
-        return $this->areas();
-    }
-
-    public function workingHours()
-    {
-        return OpeningHours::create($this->workingHours);
-    }
-
-    public function discounts()
-    {
-        return $this->hasMany(Discount::class);
+        return app('site')->get('sofre')->url(urldecode($this->url));
     }
 }

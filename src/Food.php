@@ -26,4 +26,15 @@ class Food extends Model
     {
         return $this->belongsTo(FoodGroup::class, 'food_group_id');
     } 
+
+    /**
+     * Create a new Eloquent Collection instance.
+     *
+     * @param  array  $models
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function newCollection(array $models = [])
+    {
+        return new FoodCollection($models);
+    }
 }

@@ -5,6 +5,8 @@ use Illuminate\Support\Str;
 
 class Helper
 { 
+    public static $openingHours;
+
     public static function table(string $table)
     {
         $prefix = "sofre_";
@@ -103,5 +105,74 @@ class Helper
 
             return compact('hours', 'data');
         }); 
+    } 
+
+    /**
+     * Modify the given working hours via the default working hours.
+     * 
+     * @param  array  $workingHours
+     * @return array              
+     */
+    public static function modifyWorkingHours(array $workingHours)
+    {
+        return collect($workingHours)->map(function($meals, $day) {
+            return collect($meals)->map(function($meal) use ($day) {
+                return array_merge($meal, [
+                    'hours' => static::modifyHours($meal['hours'], $meal['data'], $day)
+                ]);
+            });
+        })->toArray();
+    }
+
+    /**
+     * Modify hour via the given meal and day with the default hours.
+     * 
+     * @param  string $hours 
+     * @param  string $meal  
+     * @param  string $day   
+     * @return string        
+     */
+    public static function modifyHours($hours = null, $meal, $day)
+    { 
+        if(! empty($hours) && $default = static::defaultOpeningHours($day, $meal)) {
+            list($fromDefault, $toDefault) = explode('-', $default); 
+            list($from, $to) = explode('-', $hours);
+
+            if($fromDefault > $from) {
+                $hours = Str::before($default, '-').'-'.Str::after($hours, '-');
+            }
+
+            if(str_replace('00:00', '24:00', $toDefault)  < $to) {
+                $hours = Str::before($hours, '-').'-'.Str::after($default, '-');
+            }
+        }
+
+        return $hours;
+    }   
+
+    /**
+     * Get the default hours for the given day and meal.
+     * 
+     * @param  string $day 
+     * @param  string $meal
+     * @return string      
+     */
+    public static function defaultOpeningHours($day, $meal)
+    {
+        if(! isset(static::$openingHours)) {
+            static::$openingHours = static::filterHours(Nova\Setting::openingHours());
+        } 
+
+        return collect(static::$openingHours[$day] ?? [])->where('data', $meal)->pluck('hours')->first();
+    }
+
+
+    public static function filterHours($hours)
+    {
+        return collect($hours)->map(function($hours) {
+            return collect($hours)->filter(function($hour) {
+                return ! empty(data_get($hour, 'hours'));
+            })->values();
+        })->toArray();
     }
 }
