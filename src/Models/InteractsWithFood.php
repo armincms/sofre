@@ -6,12 +6,27 @@ use Armincms\Sofre\Helper;
 
 trait InteractsWithFood
 {   
+	/**
+	 * Query the related Food.
+	 * 
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 */
     public function foods()
-    {
-
+    { 
         return $this->belongsToMany(Food::class, Helper::table('food_restaurant'))
-		        	->withPivot(collect(Helper::days())->keys()->merge([
-		        		'order', 'available', 'duration', 'price', 'id'
-		        	])->all());
+		        	->withPivot($this->getPivotColumns());
+    }
+
+    /**
+     * Returns array of the pivot columns.
+     * 
+     * @param  string $value 
+     * @return array        
+     */
+    public function getPivotColumns($value='')
+    {
+    	return array_merge(array_keys(Helper::days()), [
+    		'order', 'available', 'duration', 'price', 'id'
+    	]); 
     }
 }
