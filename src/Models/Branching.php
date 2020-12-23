@@ -1,5 +1,5 @@
 <?php
-namespace Armincms\Sofre;   
+namespace Armincms\Sofre\Models;   
 
 
 trait Branching 
@@ -9,7 +9,7 @@ trait Branching
      * 
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function branch()
+    public function chain()
     {
         return $this->belongsTo(static::class);
     }
@@ -32,7 +32,7 @@ trait Branching
      */
     public function scopeIndependent($query)
     {
-        return $this->branching('independent');
+        return $query->branching('independent');
     }
 
     /**
@@ -43,7 +43,7 @@ trait Branching
      */
     public function scopeChains($query)
     {
-        return $this->branching('chained');
+        return $query->branching('chained');
     } 
 
     /**
@@ -54,7 +54,7 @@ trait Branching
      */
     public function scopeBranchs($query)
     {
-        return $this->branching('branch');
+        return $query->branching('branch');
     } 
 
     /**
@@ -65,7 +65,7 @@ trait Branching
      */
     public function scopeWithoutBranchs($query)
     {
-        return $this->withoutBranching('branch');
+        return $query->withoutBranching('branch');
     }
 
     /**

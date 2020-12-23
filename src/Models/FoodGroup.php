@@ -1,6 +1,6 @@
 <?php
 
-namespace Armincms\Sofre;  
+namespace Armincms\Sofre\Models;  
    
 
 class FoodGroup extends Model  

@@ -1,11 +1,12 @@
 <?php
 
-namespace Armincms\Sofre;  
+namespace Armincms\Sofre\Models;  
 
 use Illuminate\Database\Eloquent\{Model, SoftDeletes}; 
 use Armincms\Concerns\Authorization; 
 use Armincms\Contracts\Authorizable;
 use Zareismail\NovaPolicy\Contracts\Ownable; 
+use Armincms\Sofre\Helper;
 
 class Discount extends Model implements Authorizable, Ownable
 {     

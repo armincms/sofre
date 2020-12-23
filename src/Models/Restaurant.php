@@ -1,5 +1,5 @@
 <?php
-namespace Armincms\Sofre;  
+namespace Armincms\Sofre\Models;  
    
 use Laravelista\Comments\Commentable;  
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -69,7 +69,7 @@ class Restaurant extends Model
 
     public function component() : Component
     { 
-        return new Components\Restaurant;
+        return new \Armincms\Sofre\Components\Restaurant;
     } 
 
     /**

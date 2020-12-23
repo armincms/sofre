@@ -1,8 +1,8 @@
 <?php
 
-namespace Armincms\Sofre; 
+namespace Armincms\Sofre\Models; 
 
- 
+use Armincms\Sofre\Helper; 
 use Illuminate\Database\Eloquent\Relations\Pivot; 
 
 class Menu extends Pivot

@@ -16,7 +16,7 @@ class Food extends Resource
      *
      * @var string
      */
-    public static $model = \Armincms\Sofre\Food::class; 
+    public static $model = \Armincms\Sofre\Models\Food::class; 
 
     /**
      * The relationships that should be eager loaded when performing an index query.

@@ -1,5 +1,5 @@
 <?php
-namespace Armincms\Sofre; 
+namespace Armincms\Sofre\Models; 
   
 use Illuminate\Database\Eloquent\{Model as LaravelModel, SoftDeletes}; 
 use Spatie\MediaLibrary\HasMedia\HasMedia;  
@@ -9,6 +9,7 @@ use Armincms\Concerns\HasMediaTrait;
 use Armincms\Contracts\Authorizable;
 use Armincms\Concerns\Authorization; 
 use Zareismail\NovaPolicy\Contracts\Ownable; 
+use Armincms\Sofre\Helper;
 
 class Model extends LaravelModel implements Authorizable, Translatable, HasMedia, Ownable
 {   

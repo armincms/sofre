@@ -15,7 +15,7 @@ class FoodGroup extends Resource
      *
      * @var string
      */
-    public static $model = \Armincms\Sofre\FoodGroup::class;    
+    public static $model = \Armincms\Sofre\Models\FoodGroup::class;    
 
     /**
      * Get the fields displayed by the resource.

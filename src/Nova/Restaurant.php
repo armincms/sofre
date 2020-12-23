@@ -24,7 +24,7 @@ class Restaurant extends Resource
      *
      * @var string
      */
-    public static $model = \Armincms\Sofre\Restaurant::class;  
+    public static $model = \Armincms\Sofre\Models\Restaurant::class;  
 
     /**
      * The relationships that should be eager loaded when performing an index query.
@@ -63,7 +63,7 @@ class Restaurant extends Resource
     public static function relatableRestaurants(NovaRequest $request, $query)
     {
         return parent::relatableQuery($request, $query) 
-                    ->whereBranching('chained')
+                    ->chains()
                     ->authenticate();
     }
 
@@ -121,7 +121,7 @@ class Restaurant extends Resource
 
             Text::make(__('Branch Name'), 'branch')
                 ->required()
-                    ->rules($this->isBranchRequest($request) ? 'required' : null)
+                ->rules($this->isBranchRequest($request) ? 'required' : null)
                 ->onlyOnForms()
                 ->fillUsing(function($request, $model, $attribute, $requestAttribute) {
                     if($this->isBranchRequest($request)) {

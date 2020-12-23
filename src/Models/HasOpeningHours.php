@@ -1,5 +1,5 @@
 <?php
-namespace Armincms\Sofre;  
+namespace Armincms\Sofre\Models;  
  
 use Spatie\OpeningHours\OpeningHours;   
 use Armincms\Sofre\Helper;   

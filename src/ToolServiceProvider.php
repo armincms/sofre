@@ -16,11 +16,11 @@ class ToolServiceProvider extends AuthServiceProvider
      * @var array
      */
     protected $policies = [ 
-        Food::class           =>  Policies\FoodPolicy::class, 
-        Discount::class       =>  Policies\RestaurantDiscount::class, 
-        FoodGroup::class      =>  Policies\FoodGroupPolicy::class,    
-        Restaurant::class     =>  Policies\RestaurantPolicy::class, 
-        RestaurantType::class =>  Policies\RestaurantTypePolicy::class, 
+        Models\Food::class           =>  Policies\FoodPolicy::class, 
+        Models\Discount::class       =>  Policies\RestaurantDiscount::class, 
+        Models\FoodGroup::class      =>  Policies\FoodGroupPolicy::class,    
+        Models\Restaurant::class     =>  Policies\RestaurantPolicy::class, 
+        Models\RestaurantType::class =>  Policies\RestaurantTypePolicy::class, 
     ];
 
     /**

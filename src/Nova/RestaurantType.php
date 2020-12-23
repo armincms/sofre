@@ -13,7 +13,7 @@ class RestaurantType extends Resource
      *
      * @var string
      */
-    public static $model = \Armincms\Sofre\RestaurantType::class; 
+    public static $model = \Armincms\Sofre\Models\RestaurantType::class; 
 
     /**
      * Get the fields displayed by the resource.
