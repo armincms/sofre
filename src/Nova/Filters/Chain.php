@@ -36,6 +36,6 @@ class Chain extends Filter
      */
     public function options(Request $request)
     {
-        return Restaurant::chained()->get()->pluck('id', 'name')->all();
+        return Restaurant::chains()->get()->pluck('id', 'name')->all();
     }
 }
