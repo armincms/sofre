@@ -37,4 +37,14 @@ class Food extends Model
     {
         return new FoodCollection($models);
     }
+
+    /**
+     * Get the food price.
+     * 
+     * @return 
+     */
+    public function price()
+    {
+        return $this->pivot->price;
+    }
 }

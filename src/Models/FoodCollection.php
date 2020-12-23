@@ -35,4 +35,14 @@ class FoodCollection extends Collection
     {
         return floatval($this->min('pivot.price'));
     }
+
+    /**
+     * Returns grouped food via the group_id.
+     *  
+     * @return $this        
+     */
+    public function grouped()
+    {
+        return $this->groupBy('food_group_id');
+    }
 }
