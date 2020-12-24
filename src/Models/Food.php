@@ -45,6 +45,6 @@ class Food extends Model
      */
     public function price()
     {
-        return $this->pivot->price;
+        return floatval($this->pivot->price);
     }
 }
