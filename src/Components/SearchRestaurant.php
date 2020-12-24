@@ -6,7 +6,7 @@ use Core\HttpSite\Component;
 use Core\HttpSite\Concerns\IntractsWithLayout;
 use Core\Document\Document;
 use Armincms\Sofre\Nova\Setting;
-use Armincms\Sofre\Restaurant;
+use Armincms\Sofre\Models\Restaurant;
 
 class SearchRestaurant extends Component
 {       
@@ -62,8 +62,8 @@ class SearchRestaurant extends Component
 	{
 		return array_merge($restaurant->toArray(), [
 			'url' 	=> $restaurant->getUrl(),
-			'image' => $restaurant->featuredImages('common-thumbnail'),
-			'logo' 	=> $restaurant->featuredImages('restaurant-logo', 'logo'),
+			'image' => $restaurant->featuredImage('common-thumbnail'),
+			'logo' 	=> $restaurant->featuredImage('restaurant-logo', 'logo'),
 			'discount'=> $restaurant->averageDiscount(),
 			'courier' => currency_format($restaurant->maxCourierPrice(), Setting::currencyCode()),
 			'isOpen'  => $restaurant->isOpen(),
