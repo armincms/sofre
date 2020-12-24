@@ -3,8 +3,7 @@
 namespace Armincms\Sofre\Nova;
 
 use Illuminate\Http\Request; 
-use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\{ID, Text, HasMany}; 
 use Armincms\Fields\Targomaan;
 
 class FoodGroup extends Resource
@@ -33,6 +32,8 @@ class FoodGroup extends Resource
                     ->sortable()
                     ->required(), 
             ]),
+
+            HasMany::make(__('Foods'), 'foods', Food::class),
         ];
     }
 
