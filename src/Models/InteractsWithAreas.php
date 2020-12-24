@@ -61,4 +61,34 @@ trait InteractsWithAreas
     {
         return floatval($this->areas->min('cost')); 
     }
+
+    /**
+     * Return`s average of the courier time.
+     * 
+     * @return float
+     */
+    public function averageCourierTime()
+    {
+        return floatval($this->areas->average('duration')); 
+    }
+
+    /**
+     * Return`s max of the courier time.
+     * 
+     * @return float
+     */
+    public function maxCourierTime()
+    {
+        return floatval($this->areas->max('duration')); 
+    }
+
+    /**
+     * Return`s min of the courier time.
+     * 
+     * @return float
+     */
+    public function minCourierTime()
+    {
+        return floatval($this->areas->min('duration')); 
+    }
 }
