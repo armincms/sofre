@@ -43,6 +43,6 @@ class DiscountCollection extends Collection
         $discountAmount = $this->discountAmount($food);
         $price = floatval(optional($food->pivot)->price); 
 
-        return $discountAmount > $price ? 100 : ($discountAmount / $price) * 100;
+        return $discountAmount >= $price ? 100 : ($discountAmount / $price) * 100;
     } 
 }
