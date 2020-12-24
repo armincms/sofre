@@ -10,6 +10,7 @@ use Armincms\Sofre\Helper;
 
 class Setting extends ConfigResource
 {      
+    public static $currencyCode = 'IRR';
 
     /**
      * Get the store tag name.
@@ -79,7 +80,11 @@ class Setting extends ConfigResource
 
     public static function currencyCode()
     { 
-        return static::option('_sofre_currency_', 'IRR');  
+        if(! isset(static::$currencyCode)) {
+            static::$currencyCode = static::option('_sofre_currency_', 'IRR'); 
+        }
+
+        return static::$currencyCode;
     }
 
     public static function openingHours()

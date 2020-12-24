@@ -28,7 +28,9 @@ class Restaurant extends Component implements Resourceable
 		$restaurant = RestaurantModel::where([
 			'url' 	=> $request->relativeUrl(),
 			'locale'=>  app()->getLocale(),
-		])->with('foods.group', 'discounts')->firstOrFail(); 
+		])->with(['foods' => function($query) {
+			$query->with('group', 'media');
+		}, 'discounts', 'media', 'areas'])->firstOrFail(); 
 
 		$this->resource($restaurant);  
 
