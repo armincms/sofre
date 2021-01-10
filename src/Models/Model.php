@@ -6,14 +6,14 @@ use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Armincms\Targomaan\Concerns\InteractsWithTargomaan; 
 use Armincms\Targomaan\Contracts\Translatable;  
 use Armincms\Concerns\HasMediaTrait; 
-use Armincms\Contracts\Authorizable;
-use Armincms\Concerns\Authorization; 
+use Armincms\Contracts\{Authorizable, HasLayout};
+use Armincms\Concerns\{Authorization, InteractsWithLayouts}; 
 use Zareismail\NovaPolicy\Contracts\Ownable; 
 use Armincms\Sofre\Helper;
 
-class Model extends LaravelModel implements Authorizable, Translatable, HasMedia, Ownable
+class Model extends LaravelModel implements Authorizable, Translatable, HasMedia, Ownable, HasLayout
 {   
-    use Authorization, InteractsWithTargomaan, SoftDeletes, HasMediaTrait; 
+    use Authorization, InteractsWithTargomaan, SoftDeletes, HasMediaTrait, InteractsWithLayouts; 
 
     /**
      * The attributes that should be cast to native types.

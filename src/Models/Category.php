@@ -1,12 +1,24 @@
 <?php
-namespace Armincms\Sofre\Models; 
- 
-use Armincms\Category\Category as Model;   
+
+namespace Armincms\Sofre\Models;
+    
+use Armincms\Categorizable\Category as Model;
+use Core\HttpSite\Component;   
 
 class Category extends Model  
-{     
-    public function relatedResource() : string
+{    
+    /**
+     * Get the interface of scoped resources.
+     * 
+     * @return string
+     */
+    public static function resourcesScope() : string
     {
-    	return \Armincms\Sofre\Models\Nova\Restanrant::class;
+        return Restaurant::class;
+    }
+
+    public function component() : Component
+    {
+    	return new \Armincms\Sofre\Components\Category;
     }
 }

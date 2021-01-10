@@ -35,7 +35,7 @@ class ToolServiceProvider extends AuthServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->configureWebComponents();
         $this->registerPolicies();
-        LaravelNova::serving([$this, 'servingNova']); 
+        $this->servingNova(); 
 
 
         $this->app->resolving('conversion', function($conversion) { 
@@ -58,10 +58,11 @@ class ToolServiceProvider extends AuthServiceProvider
  
             $blog->pushComponent(new Components\SearchRestaurant);
             $blog->pushComponent(new Components\Restaurant);
+            $blog->pushComponent(new Components\Category);
         });
     }
 
-    public function servingNova(ServingNova $event)
+    public function servingNova()
     {
         LaravelNova::resources([ 
             Nova\Restaurant::class,

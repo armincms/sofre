@@ -14,19 +14,9 @@ class Category extends Resource
     public static $group = 'Restaurant Services'; 
 
     /**
-     * Get the URI key for the resource.
+     * The model the resource corresponds to.
      *
-     * @return string
+     * @var string
      */
-    public static function uriKey()
-    {
-        return 'sofre-' . parent::uriKey();
-    }
-
-    public function categorizables() : array
-    {
-    	return [
-    		Categorizables\Restaurant::class,
-    	];
-    }
+    public static $model = \Armincms\Sofre\Models\Category::class; 
 }

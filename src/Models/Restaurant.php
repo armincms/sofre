@@ -5,13 +5,14 @@ use Laravelista\Comments\Commentable;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Core\HttpSite\Concerns\{IntractsWithSite, HasPermalink}; 
 use Core\HttpSite\Component;  
-use Armincms\Categorizable\Categorizable;
-use Armincms\Taggable\Taggable;
+use Armincms\Categorizable\Concerns\InteractsWithCategories; 
+use Armincms\Taggable\Contracts\Taggable;
+use Armincms\Taggable\Concerns\InteractsWithTags;
 
-class Restaurant extends Model 
+class Restaurant extends Model implements Taggable
 {    
     use InteractsWithFood, InteractsWithDiscount, InteractsWithAreas, Branching, HasOpeningHours;
-    use IntractsWithSite, HasPermalink, Sluggable, Commentable, Categorizable, Taggable; 
+    use IntractsWithSite, HasPermalink, Sluggable, Commentable, InteractsWithCategories, InteractsWithTags; 
 
     const LOCALE_KEY = 'language';
 
@@ -55,6 +56,16 @@ class Restaurant extends Model
     public function type()
     {
         return $this->belongsTo(RestaurantType::class, 'restaurant_type_id');
+    }
+
+    /**
+     * Query the related categories.
+     * 
+     * @return \Illuminate\Database\Eloqenut\Relations\BelongsToMany
+     */
+    public function categories() 
+    {
+        return $this->morphToMany(Category::class, 'categorizable', 'categorizable');
     }
 
     /**
