@@ -28,6 +28,17 @@ class Food extends Model
     } 
 
     /**
+     * Query the related Restaurant`s.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function restaurants()
+    {
+        return $this->belongsToMany(Restaurant::class)
+                    ->using(Menu::class);
+    }
+
+    /**
      * Create a new Eloquent Collection instance.
      *
      * @param  array  $models

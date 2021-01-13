@@ -7,20 +7,12 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class Menu extends Pivot
 { 
-    public $timestamps = false;
-    protected $table = 'restaurant_food';
+    public $timestamps = false; 
     public static $ordering = false;
 
     protected $casts = [
         'order'     => 'integer',
-        'available' => 'boolean',
-        'saturday'  => 'json', 
-        'sunday'    => 'json', 
-        'monday'    => 'json', 
-        'tuesday'   => 'json', 
-        'wednesday' => 'json', 
-        'thursday'  => 'json', 
-        'friday'    => 'json',
+        'available' => 'boolean', 
     ]; 
     
     /**
@@ -50,8 +42,14 @@ class Menu extends Pivot
         return $this->belongsTo(Food::class);
     }
 
+    public function restaurant()
+    {
+        return $this->belongsTo(Restaurant::class);
+    }
+
     public static function reorder($model)
     {
+        return;
         $order = 0;
 
         if(static::$ordering) return;

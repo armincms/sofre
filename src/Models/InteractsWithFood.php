@@ -13,8 +13,9 @@ trait InteractsWithFood
 	 */
     public function foods()
     { 
-        return $this->belongsToMany(Food::class, Helper::table('food_restaurant'))
-		        	->withPivot($this->getPivotColumns());
+        return $this->belongsToMany(Food::class, Helper::table('menus'))
+		        	->withPivot($this->getPivotColumns())
+                    ->using(Menu::class);
     }
 
     /**

@@ -16,7 +16,7 @@ class Menu
         return Collection::make(Helper::days())
                 ->map([$this, 'meals'])
                 ->prepend($this->priceField())
-                ->prepend(Number::make(__('Order'), 'order')->required()->rules('required'))
+                // ->prepend(Number::make(__('Order'), 'order')->required()->rules('required'))
                 ->prepend(Number::make(__('Duration'), 'duration')->required()->rules('required'))
                 ->prepend(Boolean::make(__("Available"), 'available'))
                 ->all();
