@@ -13,7 +13,7 @@ trait InteractsWithFood
 	 */
     public function foods()
     { 
-        return $this->belongsToMany(Food::class, Helper::table('menus'))
+        return $this->belongsToMany(Food::class, Helper::table('menu'))
 		        	->withPivot($this->getPivotColumns())
                     ->using(Menu::class);
     }

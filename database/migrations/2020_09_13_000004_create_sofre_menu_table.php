@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Armincms\Sofre\Helper; 
 
-class CreateSofreMenusTable extends Migration
+class CreateSofreMenuTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class CreateSofreMenusTable extends Migration
      */
     public function up()
     {
-        Schema::create(Helper::table('menus'), function (Blueprint $table) {
+        Schema::create(Helper::table('menu'), function (Blueprint $table) {
             $table->bigIncrements('id');   
             $table->smallPrice(); 
             $table->integer('duration')->default(1); 
@@ -49,6 +49,6 @@ class CreateSofreMenusTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(Helper::table('menus'));
+        Schema::dropIfExists(Helper::table('menu'));
     }
 }
