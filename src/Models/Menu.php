@@ -4,10 +4,19 @@ namespace Armincms\Sofre\Models;
 
 use Armincms\Sofre\Helper; 
 use Illuminate\Database\Eloquent\Relations\Pivot; 
+use Laravelista\Comments\Commentable; 
 
 class Menu extends Pivot
 { 
-    public $timestamps = false; 
+    use Commentable;
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+    
     public static $ordering = false;
 
     protected $casts = [
