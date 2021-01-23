@@ -5,10 +5,11 @@ namespace Armincms\Sofre\Models;
 use Armincms\Sofre\Helper; 
 use Illuminate\Database\Eloquent\Relations\Pivot; 
 use Laravelista\Comments\Commentable; 
+use Armincms\Rating\Rateable; 
 
 class Menu extends Pivot
 { 
-    use Commentable;
+    use Commentable, Rateable;
 
     /**
      * Indicates if the model should be timestamped.
@@ -54,6 +55,11 @@ class Menu extends Pivot
     public function restaurant()
     {
         return $this->belongsTo(Restaurant::class);
+    }
+
+    public function price()
+    {
+        return $this->restaurant->discounts->filter->canApplyOn($this->food)->applyOn($this->price); 
     }
 
     public static function reorder($model)
