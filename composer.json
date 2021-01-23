@@ -18,6 +18,7 @@
         "armincms/currency": "~0.1",
         "armincms/categorizable": "1.*",
         "armincms/taggable": "1.*", 
+        "armincms/rating": "^0.1", 
         "dillingham/nova-items-field": "~0.1",
         "zareismail/nova-radio-field": "~0.1", 
         "dpsoft/nova-persian-date": "^1.1",
