@@ -5,11 +5,12 @@ use Laravelista\Comments\Commentable;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Core\HttpSite\Concerns\{IntractsWithSite, HasPermalink}; 
 use Core\HttpSite\Component;  
-use Armincms\Categorizable\Concerns\InteractsWithCategories; 
 use Armincms\Taggable\Contracts\Taggable;
+use Armincms\Orderable\Contracts\Orderable;
 use Armincms\Taggable\Concerns\InteractsWithTags;
+use Armincms\Categorizable\Concerns\InteractsWithCategories; 
 
-class Restaurant extends Model implements Taggable
+class Restaurant extends Model implements Taggable, Orderable
 {    
     use InteractsWithFood, InteractsWithDiscount, InteractsWithAreas, Branching, HasOpeningHours;
     use IntractsWithSite, HasPermalink, Sluggable, Commentable, InteractsWithCategories, InteractsWithTags; 
@@ -66,6 +67,16 @@ class Restaurant extends Model implements Taggable
     public function categories() 
     {
         return $this->morphToMany(Category::class, 'categorizable', 'categorizable');
+    } 
+
+    /**
+     * Query the related food.
+     * 
+     * @return \Illuminate\Database\Eloqenut\Relations\BelongsToMany
+     */
+    public function saleables()
+    {
+        return $this->menus();
     }
 
     /**

@@ -25,7 +25,7 @@ trait InteractsWithFood
      */
     public function menus()
     { 
-        return $this->hasMany(Menu::class);
+        return $this->hasMany(Menu::class)->with('food');
     } 
 
     /**

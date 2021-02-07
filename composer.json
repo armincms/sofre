@@ -19,6 +19,7 @@
         "armincms/categorizable": "1.*",
         "armincms/taggable": "1.*", 
         "armincms/rating": "^0.1", 
+        "armincms/orderable": "~0.1",
         "dillingham/nova-items-field": "~0.1",
         "zareismail/nova-radio-field": "~0.1", 
         "dpsoft/nova-persian-date": "^1.1",
@@ -40,5 +41,6 @@
         "sort-packages": true
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "version": "0.10.1111"
 }

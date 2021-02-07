@@ -4,6 +4,7 @@ namespace Armincms\Sofre;
 
 use Laravel\Nova\Nova as LaravelNova; 
 use Laravel\Nova\Events\ServingNova; 
+use Illuminate\Support\Facades\Event; 
 use Illuminate\Support\ServiceProvider; 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider;
 
@@ -17,6 +18,7 @@ class ToolServiceProvider extends AuthServiceProvider
      */
     protected $policies = [ 
         Models\Food::class           =>  Policies\FoodPolicy::class, 
+        Models\Order::class           =>  Policies\OrderPolicy::class, 
         Models\Discount::class       =>  Policies\RestaurantDiscount::class, 
         Models\FoodGroup::class      =>  Policies\FoodGroupPolicy::class,    
         Models\Restaurant::class     =>  Policies\RestaurantPolicy::class, 
@@ -34,8 +36,10 @@ class ToolServiceProvider extends AuthServiceProvider
         $this->loadJsonTranslationsFrom(__DIR__.'/../resources/lang'); 
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->configureWebComponents();
+        $this->registerEventListeners();
+        $this->registerObservers();
         $this->registerPolicies();
-        $this->servingNova(); 
+        $this->servingNova();  
 
 
         $this->app->resolving('conversion', function($conversion) { 
@@ -62,16 +66,28 @@ class ToolServiceProvider extends AuthServiceProvider
         });
     }
 
+    public function registerEventListeners()
+    {
+        Event::listen(\NovaButton\Events\ButtonClick::class, Listeners\OrderSituation::class);
+    }
+
     public function servingNova()
     {
         LaravelNova::resources([ 
             Nova\Restaurant::class,
             Nova\FoodGroup::class, 
+            Nova\Menu::class,
             Nova\Food::class,
+            Nova\Order::class,
             Nova\Category::class,
             Nova\Discount::class,
             Nova\RestaurantType::class,  
             Nova\Setting::class, 
         ]);   
     } 
+
+    public function registerObservers()
+    {
+        Models\Order::observe(Observers\OrderObserver::class);
+    }
 }
