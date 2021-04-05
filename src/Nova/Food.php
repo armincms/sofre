@@ -44,9 +44,10 @@ class Food extends Resource
                 ->default(false),
 
             BelongsTo::make(__("Food Group"), 'group', FoodGroup::class)
-                ->rules('required')
+                ->showCreateRelationButton()
+                ->withoutTrashed()
                 ->sortable()
-                ->withoutTrashed(), 
+                ->rules('required'), 
 
             new Targomaan([
                 Text::make(__('Name'), 'name')
