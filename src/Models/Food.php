@@ -1,10 +1,13 @@
 <?php
 
 namespace Armincms\Sofre\Models; 
-  
+   
+use Laravelista\Comments\Commentable;
 
 class Food extends Model  
 {    
+    use Commentable;
+    
     protected $medias = [
         'image' => [ 
             'disk'  => 'armin.image',
