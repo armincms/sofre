@@ -104,6 +104,7 @@ class Restaurant extends Resource
                 ->default(true),
 
             BelongsTo::make(__('Restaurant Type'), 'type', RestaurantType::class)
+                ->showCreateRelationButton()
                 ->withoutTrashed()
                 ->sortable()
                 ->required() 
