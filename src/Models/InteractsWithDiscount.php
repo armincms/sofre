@@ -15,6 +15,16 @@ trait InteractsWithDiscount
     }
 
     /**
+     * Query the related Discount.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function foodDiscounts($menu)
+    {
+        return $this->discounts->filter->canApplyOn($menu->food);
+    }
+
+    /**
      * Return`s perecentage of average discount.
      * 
      * @return float

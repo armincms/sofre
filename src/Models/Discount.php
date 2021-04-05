@@ -68,7 +68,7 @@ class Discount extends Model implements Authorizable, Ownable
 
     public function canApplyOn(Food $food)
     {
-        return is_null($this->items) || in_array($food->id, (array) $this->items);
+        return is_null($this->items) || collect((array) $this->items)->filter()->has($food->id);
     }
 
     public function applyDiscount(float $price)

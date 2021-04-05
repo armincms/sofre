@@ -118,7 +118,7 @@ class Menu extends Pivot implements Saleable
      */
     public function salePrice(): float
     { 
-        return $this->restaurant->discounts->filter->canApplyOn($this->food)->applyOn($this->price);
+        return $this->restaurant->foodDiscounts($this->food)->applyOn($this->price);
     }
 
     /**
