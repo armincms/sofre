@@ -199,6 +199,7 @@ class Restaurant extends Resource
 
             new Panel(__('Contact us'), [   
                 BelongsTo::make(__('Restaurant Location'), 'zone', Zone::class)
+                    ->showCreateRelationButton()
                     ->withoutTrashed()
                     ->nullable(),
 
