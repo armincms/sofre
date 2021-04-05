@@ -49,6 +49,16 @@ class Restaurant extends Model implements Taggable, Orderable
         ], 
     ]; 
 
+    public function setMinOrderAttribute($price = null)
+    {
+        $this->attributes['min_order'] = floatval($price);
+    }
+
+    public function setPackagingCostAttribute($price = null)
+    {
+        $this->attributes['packaging_cost'] = floatval($price);
+    }
+
     /**
      * The `RestaurantType` related model.
      *  
