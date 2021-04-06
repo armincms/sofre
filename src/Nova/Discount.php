@@ -28,6 +28,13 @@ class Discount extends Resource
     ]; 
 
     /**
+     * The columns that should be searched.
+     *
+     * @var array
+     */
+    public static $search = [];
+
+    /**
      * Get the fields displayed by the resource.
      *
      * @param  \Illuminate\Http\Request  $request

@@ -27,6 +27,15 @@ class Order extends Resource
     ]; 
 
     /**
+     * The columns that should be searched.
+     *
+     * @var array
+     */
+    public static $search = [
+        'number'
+    ];
+
+    /**
      * Get the fields displayed by the resource.
      *
      * @param  \Illuminate\Http\Request  $request
