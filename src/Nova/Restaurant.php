@@ -79,8 +79,9 @@ class Restaurant extends Resource
             ID::make()
                 ->sortable(),  
 
-            Number::make(__('Hits'), 'hits')
-                ->onlyOnDetail(), 
+            Text::make(__('Name'), function() {
+                return $this->name;
+            }),
 
             RadioButton::make(__("Branch"), 'branching')
                 ->options(Helper::branching())
@@ -133,6 +134,9 @@ class Restaurant extends Resource
                     return $resource->name;
                 })
                 ->help(__('This name comes after the branch name')), 
+
+            Number::make(__('Hits'), 'hits')
+                ->onlyOnDetail(), 
             
             Multiselect::make(__("Sending Method"), 'sending_method')
                 ->options($sendingMethods = Helper::sendingMethod())
