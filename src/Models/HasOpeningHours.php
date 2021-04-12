@@ -13,7 +13,9 @@ trait HasOpeningHours
      */
     public function workingHours()
     {
-        return OpeningHours::create(Helper::modifyWorkingHours($this->working_hours));
+        return OpeningHours::create(Helper::filterHours(Helper::modifyWorkingHours(
+            $this->working_hours
+        )));
     }
 
     /**
@@ -34,5 +36,15 @@ trait HasOpeningHours
     public function nextOpening()
     {
         return $this->workingHours()->nextOpen(now());
+    }
+
+    /**
+     * Returns the restaurant next close time.
+     * 
+     * @return \DateTimeInterface
+     */
+    public function nextClosing()
+    {
+        return $this->workingHours()->nextClose(now());
     }
 }
