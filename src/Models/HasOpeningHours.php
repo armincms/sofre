@@ -34,9 +34,11 @@ trait HasOpeningHours
      * 
      * @return \DateTimeInterface
      */
-    public function nextOpening()
+    public function openingTime()
     {
-        return $this->workingHours()->nextOpen(now());
+        return $this->isOpen() 
+                    ? $this->workingHours()->previousOpen(now(config('app.timezone')))
+                    : $this->workingHours()->nextOpen(now(config('app.timezone')));
     }
 
     /**
@@ -44,9 +46,11 @@ trait HasOpeningHours
      * 
      * @return \DateTimeInterface
      */
-    public function nextClosing()
+    public function closingTime()
     {
-        return $this->workingHours()->nextClose(now());
+        return ! $this->isOpen() 
+                    ? $this->workingHours()->previousClose(now(config('app.timezone')))
+                    : $this->workingHours()->nextClose(now(config('app.timezone'))); 
     }
 
     /**
@@ -56,6 +60,6 @@ trait HasOpeningHours
      */
     public function todayWorkingHours()
     { 
-        return $this->workingHours()->forDay(Str::lower(now()->format('l')));
+        return $this->workingHours()->forDay(Str::lower(now(config('app.timezone'))->format('l')));
     }
 }
