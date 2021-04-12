@@ -1,6 +1,7 @@
 <?php
 namespace Armincms\Sofre\Models;  
- 
+
+use Illuminate\Support\Str;
 use Spatie\OpeningHours\OpeningHours;   
 use Armincms\Sofre\Helper;   
 
@@ -46,5 +47,15 @@ trait HasOpeningHours
     public function nextClosing()
     {
         return $this->workingHours()->nextClose(now());
+    }
+
+    /**
+     * Get the today working hours.
+     * 
+     * @return \Illuminate\Support\Collection
+     */
+    public function todayWorkingHours()
+    { 
+        return $this->workingHours()->forDay(Str::lower(now()->format('l')));
     }
 }
